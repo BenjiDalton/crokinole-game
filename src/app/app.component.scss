@@ -1,0 +1,311 @@
+* {
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	overflow: hidden;
+
+	.player-input {
+		display: none; 
+		position: fixed;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		z-index: 1;
+		left: 0;
+		top: 0;
+		width: 100%; 
+		height: 100%;
+		overflow: auto;
+		background-color: rgb(0, 0, 0);
+		background-color: rgba(0, 0, 0, 0.4);
+		font-size: 42;
+		.content {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 20%;
+			height: 30%;
+			background-color: #fefefe;
+			margin: 10% auto;
+			padding: 20px;
+			border: 1px solid #888;
+			
+			label {
+				position: absolute;
+				font-size: 30px;
+				font-weight: bold;
+				top: 10%;
+				padding-left: 5%;
+			}
+			input[type=text] {
+				position: absolute;
+				top: 22%;
+				width: 80%;
+				padding: 5%;
+				margin: 5px 0 22px 0;
+				border: none;
+				background: #f1f1f1;
+				font-size: 24px;
+			}
+			.button {
+				position: absolute;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 20%;
+				height: 50px;
+				border: 1px solid black;
+				border-radius: 5px;
+				text-align: center;
+				color: rgb(0, 0, 0);
+				font-size: xx-large;
+				-webkit-user-select: none;
+				user-select: none;
+				
+			}
+			.add-player-button {
+				bottom: 35%;
+			}
+			.close-button {
+				bottom: 10%;
+			}
+			.add-player-button:hover {
+				box-shadow: 0 10px 35px rgba(81, 119, 81, 0.35);
+			}
+			.close-button:hover {
+				background-color: rgb(142, 60, 60);
+			}
+			.button:hover {
+				cursor: pointer;
+				transform: translateY(-3px);
+			}
+		}
+		
+	}
+
+	.game-area {
+		display: flex;
+		position: relative;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		width: 100%;
+		min-height: 1290px;
+		min-width: 2040px;
+		background-color: #454653;
+		z-index: 0;
+
+		.game-canvas {
+			background-color: transparent !important;
+		}
+		.table-border {
+			position: absolute; 
+
+			width: 1500px;
+			height: 750px; 
+			background-color: rgba(107, 28, 28, 0.521);
+			z-index: -1; 
+			box-sizing: border-box; 
+			padding: 40px; /* adjust this to change amount of border showing around table */
+			align-items: center;
+			justify-content: center;
+			box-shadow:  2px 2px 2px #000000, 2px 2px 2px #0d0d0d;
+			.pocket {
+				position: absolute;
+				width: 40px;
+				height: 40px;
+				top: 50%;
+				left: 10%;
+				background-color: #000;
+				overflow: hidden;
+				z-index: 999;
+				border-radius: 0px 0px 30px 30px;
+			  }
+			  
+			.pocket-top-left {
+				top: 3%;
+				left: 1.2%;
+				transform: rotate(130deg);
+			}
+			.pocket-top-middle {
+				top: 0.3%;
+				left: 47%;
+				transform: rotate(180deg);
+			}
+			.pocket-top-right {
+				top: 3%;
+				left: 96.3%;
+				transform: rotate(230deg);
+			}  
+			.pocket-bottom-left {
+				top: 92%;
+				left: 1.3%;
+				transform: rotate(50deg);
+			}
+			.pocket-bottom-middle {
+				top: 94.7%;
+				left: 47%;
+			}
+			.pocket-bottom-right {
+				top: 92%;
+				left: 96.3%;
+				transform: rotate(310deg);
+			}
+		}
+		.table {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			background-color: rgb(32, 106, 51);
+			box-shadow: inset 2px 2px 2px #000000, 1px 1px 1px #000000;
+		}
+		.chalk {
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			border: 2px solid white;
+			background-color: rgb(68, 100, 152);
+			z-index: 1;
+			top: 2%;
+			left: 40%;
+			transform: translate(-50%, -50%);
+			transform: rotate(25deg);
+			align-items: center;
+			justify-content: center;
+		}
+		.chalk-dent {
+			position: relative;
+			left: 10%;
+			top: 10%;
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background-color: rgb(35, 40, 116);
+			z-index: 999;
+		}
+		.cue-ball-start {
+			position: absolute;
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			top: 49%;
+			left: 75%;
+			background-color: rgb(16, 30, 225);
+			border: 3px solid white;
+			z-index: 999;
+		}
+		.scoreboard-button {
+			position: absolute;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			width: 400px;
+			height: 50px;
+			align-items: center;
+			background-color: rgb(23, 23, 30);
+			border-radius: 4px;
+			padding: 0px 20px 0px;
+			font-weight: 600;
+			font-size: xx-large;
+			color: whitesmoke;
+			user-select: none;
+			left: 2%;
+			top: 10%;
+			.scoreboard-button-dropdown {
+				position: absolute;
+				display: none;
+				width: calc(100% - 5px);
+				height: 400px;
+				top: 100%;
+				background-color: rgb(23, 23, 30, 0.5);
+				border: 3px solid rgb(23, 23, 30, 0.8);
+				border-top-style: inset;
+				border-radius: 5px;
+				column-count: 2;
+				column-gap: 0;
+				pointer-events: none;
+				.dropdown-column {
+					display: flex;
+					justify-content: center;
+					height: 100%;
+					overflow: hidden;
+					flex-direction: column;
+					.dropdown-column-item {
+						display: flex;
+						justify-content: center;
+						height: 20%;
+						color: whitesmoke;
+					}
+				}
+			}
+		}
+		.scoreboard-button.active {
+			.scoreboard-button-dropdown {
+				display: block;
+			}
+		}
+		.scoreboard-button:hover {
+			cursor: pointer;
+			background-color: rgb(49, 58, 70);
+		}
+		.scoreboard-button:hover .scoreboard-button-dropdown {
+			display: block;
+		}
+		.game-log-container {
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 400px;
+			background-color: rgb(23, 23, 30);
+			left: 5%;
+			bottom: 10%;
+			flex-direction: column;
+			.game-log-button {
+				position: relative;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 100%;
+				height: 50px;
+				border: 1px solid black;
+				text-align: center;
+				color: whitesmoke;
+				font-size: xx-large;
+				user-select: none;
+			}
+			.game-log-body {
+				position: absolute;
+				display: none;
+				bottom: 100%;
+				width: calc(100% - 5px);
+				height: 300px;
+				background-color: rgb(23, 23, 30, 0.5);
+				background-color: rgb(23, 23, 30, 0.5);
+				border: 3px solid rgb(23, 23, 30, 0.8);
+				border-top-style: inset;
+				color: whitesmoke;
+				overflow-x: hidden;
+				overflow-y: scroll;
+				font-size: 22px;
+				text-align: start;
+			}
+			.game-log-button.active {
+				.game-log-body {
+					display: block;
+				}
+			}
+		}
+		.game-log-container:hover{
+			cursor: pointer;
+			background-color: rgb(49, 58, 70);
+		}
+		
+	}
+}
