@@ -90,7 +90,9 @@ export class PhysicsService {
 		const boardInsideOptions: Matter.IChamferableBodyDefinition = {
 			isSensor: true,
 			isStatic: true,
-			render: { fillStyle: this.boardColor }
+			render: { 
+				fillStyle: this.boardColor
+			}
 		};
 		const boardCircleOptions: Matter.IChamferableBodyDefinition = {
 			isSensor: true,
@@ -233,7 +235,6 @@ export class PhysicsService {
 			for (let i = 0, j = pairs.length; i != j; ++i) {
 				let pair = pairs[i];
 				if (pair.bodyB.label === 'gamePiece') {
-					
 					switch (pair.bodyA.label) {
 						case 'boundary':
 							pair.bodyB.frictionAir = 1;
@@ -250,7 +251,6 @@ export class PhysicsService {
 			for (let i = 0, j = pairs.length; i != j; ++i) {
 				let pair = pairs[i];
 				if (pair.bodyB.label === 'gamePiece') {
-					
 					switch (pair.bodyA.label) {
 						case 'boardCenter':
 							if (pair.bodyB.speed < 0.2 && Math.abs(pair.bodyB.position.x - pair.bodyA.position.x) < 1) {
@@ -279,8 +279,6 @@ export class PhysicsService {
 						case 'boundary': 
 							pair.bodyB.frictionAir = 0.04;
 							break;
-						case 'peg':
-							break
 					};
 				};
 			};
