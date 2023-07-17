@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { BallComponent } from './ball/ball.component';
 import { PhysicsService } from './services/physics.service';
 import { GameStateService } from './services/game-state.service';
 import { PlayerComponent } from './player/player.component';
@@ -25,37 +24,14 @@ export class AppComponent implements AfterViewInit {
 	}
 	ngAfterViewInit(): void {
 		this.physicsService.renderElement = this.gameAreaElement.nativeElement;
-		this.gameState.newGame();
-		this.openPlayerInput();
+		// this.gameState.newGame();
+		// this.openPlayerInput();
 		this._players = this.gameState.players;
 		this.fillScoreboard = true;
 		this.scratchSubscription = this.physicsService.scratchSubject.subscribe(message => {
 			console.log('Received scratch notification:', message);
 		});
-		this.ballRemovedSubscription = this.physicsService.ballRemoved.subscribe(removedBall => {
-			if (removedBall.label === 'poolBall 8') {
-				const activeBalls = [];
-				for (let player of this._players) {
-					player.ballsRemaining.ballInfo.forEach((ball: any) => {
-						activeBalls.push(ball);
-					});
-				};
-				if (activeBalls.length > 2) {
-					console.log('way to go dummy');
-					// this.gameState.newGame();
-				}
-			};
-			for (let player of this._players) {
-				player.ballsRemaining.ballInfo.forEach((ball: any) => {
-					if (ball === removedBall) {
-						player.ballsRemaining.ballInfo.pop(ball);
-						player.ballsRemaining.ballNumber.splice(player.ballsRemaining.ballNumber.indexOf(ball.label), 1)
-						this.updateGameLog(`The ${ball.label} was hit in by ${player.name}`)
-					}
-				});
-			}
-			this.updateScoreboard();
-		});
+		
 	}
 
 	public openPlayerInput(): void {
