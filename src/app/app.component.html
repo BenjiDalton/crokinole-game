@@ -9,50 +9,11 @@
 		  </div>
 	</div>
 	<div class="game-area">
-		<!-- <div #scoreBoardButton class="scoreboard-button" [class.active]="viewScoreboard" (click)="displayScoreboard()">Scoreboard
-			<div class="scoreboard-button-dropdown">
-				<div class="dropdown-column" style="border-right: 4px solid black;">
-					<div class="dropdown-column-item">Brooks</div>
-					<ng-container *ngIf="fillScoreboard" >
-						<div class="dropdown-column-item"> {{ playerBallType(players[0]) }}</div>
-						<div *ngFor="let ball of playerBallsRemaining(players[0])" class="dropdown-column-item">
-							{{ ball }}
-						</div>
-					</ng-container>
-				</div>
-				<div class="dropdown-column">
-					<div class="dropdown-column-item">Ben</div>
-					<ng-container *ngIf="fillScoreboard" >
-						<div class="dropdown-column-item"> {{ playerBallType(players[1]) }}</div>
-						<div *ngFor="let ball of playerBallsRemaining(players[1])" class="dropdown-column-item">
-							{{ ball }}
-						</div>
-					</ng-container>
-				</div>
-			</div>
-		</div>
-		<div class="table-border">
-			<div class="pocket pocket-top-left"></div>
-			<div class="pocket pocket-top-middle"></div>
-			<div class="pocket pocket-top-right"></div>
-			<div class="pocket pocket-bottom-left"></div>
-			<div class="pocket pocket-bottom-middle"></div>
-			<div class="pocket pocket-bottom-right"></div> 
-			<div class="chalk">
-				<div class="chalk-dent"></div>
-			</div>
-			<div class="cue-ball-start"></div>
-			
-			
-			<div class="table"></div>
-		</div>
-		<div class="game-log-container">
-			<div class="game-log-button" [class.active]="viewLog" (click)="displayLog()">
-				Game Log
-				<div class="game-log-body"></div>
-			</div>
-			
-		</div> -->
+		<p style="left: 19%;">Player One</p>
+		<p style="right: 19%;">Player Two</p>
+		<div class="piece-container-shadow" style="left: 19%;"></div>
+		<div class="piece-container-shadow" style="right: 19%;"></div>
+		<div class="board-shadow"></div>
 		<canvas #gameArea class="game-canvas"></canvas>
 	</div>
 </div>

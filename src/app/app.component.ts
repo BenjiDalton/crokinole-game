@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, OnInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { PhysicsService } from './services/physics.service';
 import { GameStateService } from './services/game-state.service';
 import { PlayerComponent } from './player/player.component';

@@ -17,7 +17,10 @@ export class PhysicsService {
 	private mouse: Mouse;
 	private width = 2040;
 	private height = 1290;
+	private showBoundaries = false;
 	private boardColor = '#966F33';
+	private playerOneColor = '#335B96';
+	private playerTwoColor = '#DF4A26';
 	private normalPegState = '#F5CC7C';
 	private activePegState = '#F3EC06';
 	private boardCenterRadius = 21;
@@ -45,8 +48,9 @@ export class PhysicsService {
 		this.mouse = Mouse.create(element);
 		this.setupMouseConstraint();
 		this.renderer.mouse = this.mouse;
-		this.addStuff();
+		
 		this.setupEngine();
+		this.addStuff();
 		this.collisionDetect();
 	}
 	public get renderElement(): HTMLCanvasElement {
@@ -64,7 +68,11 @@ export class PhysicsService {
 		this.generateGameBorders();
 		this.generateBoard();
 		this.generateBoardPegs();
-		this.generateGamePieces();
+		this.generateGamePieceContainers();
+		for (let player of ['p1', 'p2']) {
+			this.generateGamePieces(player);
+		}
+		
 	}
 	
 	private setupMouseConstraint(): void {
@@ -131,18 +139,23 @@ export class PhysicsService {
 		const borderOptions: Matter.IChamferableBodyDefinition = {
 			label: 'boundary',
 			isStatic: true,
-			render: { fillStyle: 'transparent' },
+			render: {
+				fillStyle: this.showBoundaries === true ? 'white': 'transparent',
+			},
+			
 			restitution: 1
 		};
 		
 		const topBorder = Bodies.rectangle(this.width * 0.50, this.height * 0.075, 400, borderThickness, borderOptions);
-		const rightBorder = Bodies.rectangle(this.width * 0.77, this.height / 2, borderThickness, 350, borderOptions);
+		const rightBorder = Bodies.rectangle(this.width * 0.77, this.height / 2, borderThickness, 400, borderOptions);
 		const bottomBorder = Bodies.rectangle(this.width * 0.50, this.height * 0.925, 400, borderThickness, borderOptions);
-		const leftBorder = Bodies.rectangle(this.width * 0.23, this.height / 2, borderThickness, 350, borderOptions);
+		const leftBorder = Bodies.rectangle(this.width * 0.23, this.height / 2, borderThickness, 400, borderOptions);
 		const topRightBorder = Bodies.polygon(this.width * 0.825, 0, 8, 500, borderOptions);
 		const topLeftBorder = Bodies.polygon(this.width * 0.175, 0, 8, 500, borderOptions);
 		const bottomRightBorder = Bodies.polygon(this.width * 0.825, this.height, 8, 500, borderOptions);
 		const bottomLeftBorder = Bodies.polygon(this.width * 0.175, this.height, 8, 500, borderOptions);
+		const farLeftBorder = Bodies.rectangle(0, this.height / 2, 300, 800, borderOptions);
+		const farRightBorder = Bodies.rectangle(this.width, this.height / 2, 300, 800, borderOptions);
 
 		Composite.add(
 			this.engine.world, [
@@ -153,7 +166,9 @@ export class PhysicsService {
 				topRightBorder, 
 				topLeftBorder, 
 				bottomRightBorder, 
-				bottomLeftBorder
+				bottomLeftBorder,
+				farLeftBorder,
+				farRightBorder
 			]
 		);
 	}
@@ -161,7 +176,10 @@ export class PhysicsService {
 		const pegOptions: Matter.IChamferableBodyDefinition = {
 			label: 'peg',
 			isStatic: true,
-			render: {fillStyle: this.normalPegState}	
+			render: {
+				fillStyle: 
+				this.normalPegState
+			}	
 		};
 		/*
 		pegs label from 1 to 8, starting from the peg at the 10 o'clock position
@@ -176,27 +194,45 @@ export class PhysicsService {
 		const peg8 = Bodies.circle(this.width * 0.558, this.height * 0.54, 8, pegOptions);
 		Composite.add(this.engine.world, [peg1, peg2, peg3, peg4, peg5, peg6, peg7, peg8]);
 	}
-	private generateGamePieces(): void {
-		const xStart = 750;
-		const yStart = 645;
-		const pieceArr: Composite[] = [];
-		for (let i = 1; i < 6; i++) {
-			pieceArr.push(Composites.stack(xStart - 30 * i, yStart - 15 * i, 1, 1, 1, 0, this.getNextPiece));
+	private generateGamePieceContainers(): void {
+		const pieceContainerOptions: Matter.IChamferableBodyDefinition = {
+			label: 'pieceContainer',
+			isSensor: true,
+			isStatic: true,
+			render: { 
+				fillStyle:'E1D0A0',
+				lineWidth: 40
+			},
+			restitution: 1
 		};
-		pieceArr.forEach(pieceComposite => {
-			this.addComposite(pieceComposite);
-		});
+		const playerOneContainer = Bodies.rectangle(this.width * 0.13, this.height / 2, 200, 340, pieceContainerOptions);
+		const playerTwoContainer = Bodies.rectangle(this.width * 0.87, this.height / 2, 200, 340, pieceContainerOptions);
+		playerOneContainer.render.strokeStyle = this.playerOneColor;
+		playerTwoContainer.render.strokeStyle = this.playerTwoColor;
+
+		Composite.add(this.engine.world, [playerOneContainer, playerTwoContainer]);
 	}
-	private getNextPiece = (x: number, y: number): Body => {
-		const generatedValue = this.createGamePiece('p1', x, y);
-		// this.physicsService.addTrail(generatedValue);
-		return generatedValue;
+	private generateGamePieces(player: string): void {
+		let xStart = 250;
+		if (player === 'p2') {
+			xStart += 1500;
+		};
+		let yStart = 660;
+		const pieceArr: Body[] = [];
+		for (let i = 1; i < 6; i++) {
+			pieceArr.push(this.createGamePiece(player, xStart, yStart - 10 * i));
+		};
+		pieceArr.forEach(body => {
+			this.addBody(body);
+		});
 	}
 	private createGamePiece(player: any, x: number, y: number): Body {
 		const gamePieceOptions: IBodyDefinition = {
 			label: 'gamePiece',
 			frictionAir: 0.04,
-			render: { fillStyle: '#335B96' },
+			render: { 
+				fillStyle: player === 'p1' ? this.playerOneColor : this.playerTwoColor 
+			},
 			restitution: 0.5,
 			density: 1700
 		};
