@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Bodies, Body, Composite, Constraint, Engine, Events, Mouse, MouseConstraint, Render, Runner, Vector, Common, Vertices, Collision, IBodyDefinition, Composites } from 'matter-js';
-import { Observable, Subject, firstValueFrom, of } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +48,6 @@ export class PhysicsService {
 		this.mouse = Mouse.create(element);
 		this.setupMouseConstraint();
 		this.renderer.mouse = this.mouse;
-		
 		this.setupEngine();
 		this.addStuff();
 		this.collisionDetect();
@@ -238,8 +237,7 @@ export class PhysicsService {
 		};
 		return Bodies.circle(x, y, 20, gamePieceOptions)
 	}
-
-	public addBody(body: Body): void {
+	public addBody(body: Body | Body[]): void {
 		Composite.add(this.engine.world, body);
 	}
 	public addComposite(composite: Composite): void {
