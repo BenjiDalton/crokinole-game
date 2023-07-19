@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { PhysicsService } from './services/physics.service';
 import { GameStateService } from './services/game-state.service';
 import { PlayerComponent } from './player/player.component';
+import { WorldCreationService } from './services/world-creation.service';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,7 @@ import { PlayerComponent } from './player/player.component';
   imports: [
     BrowserModule
   ],
-  providers: [PhysicsService, GameStateService],
+  providers: [PhysicsService, GameStateService, WorldCreationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

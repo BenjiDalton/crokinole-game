@@ -7,11 +7,8 @@ import { Component } from '@angular/core';
 })
 export class PlayerComponent {
 	private _name: string; 
-	private _ballsRemaining: any = {
-		ballNumber: [],
-		ballInfo: []
-	};
-	private _ballType: string;
+	private _turn: boolean = false;
+	private _wins: number = 0;
 	
 	constructor(){}
 	public set name(name: string) {
@@ -21,17 +18,17 @@ export class PlayerComponent {
 		return this._name
 	}
 
-	public set ballsRemaining(ballsArr: []) {
-		this._ballsRemaining = ballsArr;
+	public set turn(turn: boolean) {
+		this._turn = turn;
 	}
-	public get ballsRemaining(): any {
-		return this._ballsRemaining
+	public get turn(): boolean {
+		return this._turn
 	}
 
-	public set ballType(ballType: string) {
-		this._ballType = ballType;
+	public set wins(wins: number) {
+		this._wins = wins;
 	}
-	public get ballType(): string {
-		return this._ballType;
+	public get wins(): number {
+		return this._wins
 	}
 }
