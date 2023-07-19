@@ -1,9 +1,9 @@
-import { AfterViewInit, OnInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { PhysicsService } from './services/physics.service';
 import { GameStateService } from './services/game-state.service';
 import { PlayerComponent } from './player/player.component';
-import { Observable, Subscription } from 'rxjs';
-import { WorldCreationService } from './services/world-creation.service';
+import { WorldComponent } from './world/world.component';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-root',
@@ -17,14 +17,16 @@ export class AppComponent implements AfterViewInit {
 	private _viewScoreboard: boolean = false;
 	private _viewLog: boolean = false;
 	private _players: PlayerComponent[];
+	private world: WorldComponent;
 	public fillScoreboard: boolean = false;
 	private gameStateSubscription: Subscription;
 	
-	constructor(private worldCreation: WorldCreationService ,private physicsService: PhysicsService, private gameState: GameStateService) {
+	constructor(private physicsService: PhysicsService, private gameState: GameStateService) {
 	}
 	ngAfterViewInit(): void {
 		this.physicsService.renderElement = this.gameAreaElement.nativeElement;
-		this.worldCreation.addStuff();
+		this.world = new WorldComponent(this.physicsService, this.gameState);
+		this.world.create();
 		// this.openPlayerInput();
 
 		this.gameStateSubscription = this.gameState.gameStateMessage.subscribe(message => {

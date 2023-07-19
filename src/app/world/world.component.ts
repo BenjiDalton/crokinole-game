@@ -1,12 +1,22 @@
-import { Injectable } from '@angular/core';
-import { PhysicsService } from './physics.service';
+import { Component } from '@angular/core';
+import { PhysicsService } from '../services/physics.service';
 import { Body, Bodies, Composite, IBodyDefinition } from 'matter-js';
+import { PlayerComponent } from '../player/player.component';
+import { GameStateService } from '../services/game-state.service';
 
-@Injectable({
-  providedIn: 'root'
+@Component({
+  selector: 'app-world',
+  templateUrl: './world.component.html',
+  styleUrls: ['./world.component.scss']
 })
-export class WorldCreationService {
-  	private width = 2040;
+export class WorldComponent {
+	private Brooks = new PlayerComponent;
+	private Ben = new PlayerComponent;
+	private _players: any = {
+		'p1': this.Brooks, 
+		'p2': this.Ben
+	};
+	private width = 2040;
 	private height = 1290;
 	private showBoundaries = false;
 	private boardColor = '#966F33';
@@ -18,18 +28,20 @@ export class WorldCreationService {
 	private boardCenterColor = 'black';
 	private boardCenterActiveColor = '#CE3D00'
 
-	constructor(private physicsService: PhysicsService) { 
+	constructor(private physicsService: PhysicsService, private gameState: GameStateService) { 
 	}
-	public addStuff(): void {
+
+	public create(): void {
 		this.generateGameBorders();
 		this.generateBoard();
 		this.generateBoardPegs();
 		this.generateGamePieceContainers();
 		for (let player of ['p1', 'p2']) {
-			this.generateGamePieces(player);
-		}
+			this.generateGamePieces(player, this.gameState.players[player]);
+			console.log(this.gameState.players)
+		  }
 	}
-	
+
 	private generateBoard(): void {
 		const boardOutsideOptions: Matter.IChamferableBodyDefinition = {
 			label: 'boardRails',
@@ -41,16 +53,16 @@ export class WorldCreationService {
 			isSensor: true,
 			isStatic: true,
 			render: { 
-				fillStyle: this.boardColor
+			fillStyle: this.boardColor
 			}
 		};
 		const boardCircleOptions: Matter.IChamferableBodyDefinition = {
 			isSensor: true,
 			isStatic: true,
 			render: { 
-				fillStyle: 'transparent', 
-				strokeStyle: 'black', 
-				lineWidth: 5
+			fillStyle: 'transparent', 
+			strokeStyle: 'black', 
+			lineWidth: 5
 			}
 		};
 		const boardOutside = Bodies.polygon(this.width / 2, this.height / 2, 8, 500, boardOutsideOptions);
@@ -76,7 +88,7 @@ export class WorldCreationService {
 			label: 'boundary',
 			isStatic: true,
 			render: {
-				fillStyle: this.showBoundaries === true ? 'white': 'transparent',
+			fillStyle: this.showBoundaries === true ? 'white': 'transparent',
 			}
 		};
 		
@@ -100,8 +112,8 @@ export class WorldCreationService {
 			label: 'peg',
 			isStatic: true,
 			render: {
-				fillStyle: 
-				this.normalPegState
+			fillStyle: 
+			this.normalPegState
 			}	
 		};
 		/*
@@ -126,8 +138,8 @@ export class WorldCreationService {
 			isSensor: true,
 			isStatic: true,
 			render: { 
-				fillStyle:'E1D0A0',
-				lineWidth: 40
+			fillStyle:'E1D0A0',
+			lineWidth: 40
 			},
 			restitution: 1
 		};
@@ -140,26 +152,25 @@ export class WorldCreationService {
 			this.physicsService.addBody(body);
 		}
 	}
-	private generateGamePieces(player: string): void {
+	private generateGamePieces(playerID: string, player: PlayerComponent): void {
 		let xStart = 250;
-		if (player === 'p2') {
+		if (playerID === 'p2') {
 			xStart += 1500;
 		};
 		let yStart = 660;
-		const pieceArr: Body[] = [];
 		for (let i = 1; i < 6; i++) {
-			pieceArr.push(this.createGamePiece(player, xStart, yStart - 10 * i));
+			player.pieces.push(this.createGamePiece(playerID, xStart, yStart - 10 * i));
 		};
-		pieceArr.forEach((body: Body) => {
+		player.pieces.forEach((body: Body) => {
 			this.physicsService.addBody(body);
 		});
-	}
+		}
 	private createGamePiece(player: any, x: number, y: number): Body {
 		const gamePieceOptions: IBodyDefinition = {
 			label: 'gamePiece',
 			frictionAir: 0.04,
 			render: { 
-				fillStyle: player === 'p1' ? this.playerOneColor : this.playerTwoColor 
+			fillStyle: player === 'p1' ? this.playerOneColor : this.playerTwoColor 
 			},
 			restitution: 0.5,
 			density: 1700

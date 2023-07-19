@@ -18,7 +18,10 @@ Goals:
 export class GameStateService {
 	private Brooks = new PlayerComponent;
 	private Ben = new PlayerComponent;
-	private _players = [this.Brooks, this.Ben];
+	private _players: any = {
+		'p1': this.Brooks, 
+		'p2': this.Ben
+	};
 	private scratchSubscription: Subscription;
 	private ballRemovedSubscription: Subscription;
 	private playerChangeSubscription: Subscription;

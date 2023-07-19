@@ -9,6 +9,7 @@ export class PlayerComponent {
 	private _name: string; 
 	private _turn: boolean = false;
 	private _wins: number = 0;
+	private _pieces: any[] = [];
 	
 	constructor(){}
 	public set name(name: string) {
@@ -30,5 +31,11 @@ export class PlayerComponent {
 	}
 	public get wins(): number {
 		return this._wins
+	}
+	public set pieces(pieces: []) {
+		this._pieces = pieces;
+	}
+	public get pieces(): any[] {
+		return this._pieces
 	}
 }
