@@ -6,16 +6,16 @@
     background-color: transparent;
     text-align: center;
     justify-content: center;
-    pointer-events: none;
 
     .piece-container-shadow {
-        position: relative;
-        height: 76.9%;
-        top: 6.23%;
+        position: absolute;
+        height: 77%;
+        top: 16.6%;
         width: 74%;
         left: 13%;
         background-color: transparent;
         box-shadow: inset 2px 3px 25px #000000;
+        pointer-events: none;
     }
     p {
         all: unset;
@@ -23,6 +23,18 @@
         bottom: 0;
         font-size: 40px;
         color: #f6ffff;
+        pointer-events: none;
+    }
+    input[type=color] {
+        all: unset;
+        -webkit-appearance: auto;
+        appearance: auto;
+        position: absolute;
+        background: #454653;
+        inline-size: 244px;
+        block-size: 27px;
+        bottom: -4%;
+        left: 5%;
     }
 }
 

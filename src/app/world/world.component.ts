@@ -16,8 +16,8 @@ export class WorldComponent {
 	private height = 1290;
 	private showBoundaries = false;
 	private boardColor = '#966F33';
-	private playerOneColor = '#335B96';
-	private playerTwoColor = '#DF4A26';
+	public playerOneColor = '#335B96';
+	public playerTwoColor = '#DF4A26';
 	private normalPegState = '#F5CC7C';
 	private activePegState = '#F3EC06';
 	private boardCenterRadius = 21;
@@ -34,7 +34,6 @@ export class WorldComponent {
 		this.generateGamePieceContainers();
 		this.newGame();
 	}
-
 	private generateBoard(): void {
 		const boardOutsideOptions: Matter.IChamferableBodyDefinition = {
 			label: 'boardRails',
@@ -130,8 +129,8 @@ export class WorldComponent {
 			isSensor: true,
 			isStatic: true,
 			render: { 
-			fillStyle:'E1D0A0',
-			lineWidth: 40
+				fillStyle:'E1D0A0',
+				lineWidth: 40
 			},
 			restitution: 1
 		};
@@ -175,5 +174,10 @@ export class WorldComponent {
 			density: 1700
 		};
 		return Bodies.circle(x, y, 20, gamePieceOptions)
+	}
+	public updatePlayerColor(event: any): void {
+		let colorChooser = document.getElementById(event.id);
+		this.playerTwoColor = event.value;
+		
 	}
 }

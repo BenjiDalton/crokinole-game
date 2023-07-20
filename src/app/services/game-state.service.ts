@@ -64,10 +64,6 @@ export class GameStateService {
 	}
 
 	public newGame(): void {
-
-		// this.assignPlayerBallType(this.Brooks, this._balls.solids, 'solids');
-		// this.assignPlayerBallType(this.Ben, this._balls.stripes, 'stripes');
-
 		const randomPlayer = Math.floor(Math.random() * this._players.length);
 		this.currentPlayer = this._players[randomPlayer];
 		this.currentPlayer.turn = !this.currentPlayer.turn;
@@ -80,10 +76,6 @@ export class GameStateService {
 				this.currentPlayer = player;
 			};
 		};
-	}
-	private assignPlayerBallType(player: PlayerComponent, balls: any, ballType: string): void {
-		balls.forEach((ball: any) => {
-		})
 	}
 	private sendGameStateMessage(message: string): void {
 		this._gameStateMessage.next(message);
