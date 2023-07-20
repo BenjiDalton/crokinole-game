@@ -1,18 +1,32 @@
-p {
+.piece-container {
     position: absolute;
-    top: 28%;
-    font-size: 40px;
-    color: #f6ffff;
-}
-.piece-container-shadow {
-    position: absolute;
-    width: 7.8%;
-    height: 26.5%;
-    top: 36.8%;
+    width: 10.8%;
+    height: 34.5%;
+    top: 31%;
     background-color: transparent;
-    box-shadow:  inset 2px 3px 25px #000000;
+    text-align: center;
+    justify-content: center;
     pointer-events: none;
+
+    .piece-container-shadow {
+        position: relative;
+        height: 76.9%;
+        top: 6.23%;
+        width: 74%;
+        left: 13%;
+        background-color: transparent;
+        box-shadow: inset 2px 3px 25px #000000;
+    }
+    p {
+        all: unset;
+        position: relative;
+        bottom: 0;
+        font-size: 40px;
+        color: #f6ffff;
+    }
 }
+
+
 .board-shadow {
     position: absolute;
     left: 34.3%;

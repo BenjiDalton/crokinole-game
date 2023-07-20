@@ -3,6 +3,7 @@ import { PhysicsService } from '../services/physics.service';
 import { Body, Bodies, Composite, IBodyDefinition } from 'matter-js';
 import { PlayerComponent } from '../player/player.component';
 import { GameStateService } from '../services/game-state.service';
+import { KeyValuePipe } from '@angular/common';
 
 @Component({
   selector: 'app-world',
@@ -10,12 +11,7 @@ import { GameStateService } from '../services/game-state.service';
   styleUrls: ['./world.component.scss']
 })
 export class WorldComponent {
-	private Brooks = new PlayerComponent;
-	private Ben = new PlayerComponent;
-	private _players: any = {
-		'p1': this.Brooks, 
-		'p2': this.Ben
-	};
+
 	private width = 2040;
 	private height = 1290;
 	private showBoundaries = false;
@@ -36,10 +32,7 @@ export class WorldComponent {
 		this.generateBoard();
 		this.generateBoardPegs();
 		this.generateGamePieceContainers();
-		for (let player of ['p1', 'p2']) {
-			this.generateGamePieces(player, this.gameState.players[player]);
-			console.log(this.gameState.players)
-		  }
+		this.newGame();
 	}
 
 	private generateBoard(): void {
@@ -78,7 +71,6 @@ export class WorldComponent {
 		boardOuterCircle.label = 'outerCircle';
 
 		for (let body of [boardOutside, boardInside, boardCenter, boardInnerCircle, boardMiddleCircle, boardOuterCircle]) {
-			console.log("body", body)
 			this.physicsService.addBody(body);
 		}
 	}
@@ -152,7 +144,13 @@ export class WorldComponent {
 			this.physicsService.addBody(body);
 		}
 	}
-	private generateGamePieces(playerID: string, player: PlayerComponent): void {
+	public newGame(): void {
+		for (let [playerID, player] of Object.entries(this.gameState.players)) {
+			this.generateGamePieces(playerID, player);
+		  }
+		return 
+	}
+	private generateGamePieces(playerID: string, player: any): void {
 		let xStart = 250;
 		if (playerID === 'p2') {
 			xStart += 1500;
@@ -164,7 +162,8 @@ export class WorldComponent {
 		player.pieces.forEach((body: Body) => {
 			this.physicsService.addBody(body);
 		});
-		}
+	}
+	
 	private createGamePiece(player: any, x: number, y: number): Body {
 		const gamePieceOptions: IBodyDefinition = {
 			label: 'gamePiece',
