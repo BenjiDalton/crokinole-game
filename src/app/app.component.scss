@@ -236,17 +236,9 @@
 		position: absolute;
 		right: 25%;
 		top: 10%;
-		-webkit-animation-duration: 2s;
-		-webkit-animation-name: slidein;
-		-webkit-animation-iteration-count: 2;
-		-webkit-animation-direction: alternate;
-		animation-duration: 2s;
-		animation-name: slidein;
-		animation-iteration-count: 2;
-		animation-direction: alternate;
-		// -webkit-animation: fadeOut 2s linear forwards;
-		// animation: fadeOut 2s linear forwards;
 
+		-webkit-animation: slideIn 2s ease 0s 2 alternate none;
+		animation: slideIn 2s ease 0s 2 alternate none;
 
 		.alert>.start-icon {
 			margin-right: 0;
@@ -268,11 +260,11 @@
 				background-color: transparent;
 			}
 		}
-
-		.alert-simple.alert-success {
+		.alert-simple {
 			display: flex;
 			position: absolute;
 			align-items: center;
+			justify-content: center;
 			border: 1px solid rgb(164, 167, 185);
 			background-color: rgb(164, 167, 185, 0.1);
 			box-shadow: 0px 0px 5px #161d38;
@@ -282,12 +274,12 @@
 			transition: 0.5s;
 			width: 500px;
 			height: 50px;
-			
 			z-index: 1;
-			top: 5%;
 		  	cursor:pointer;
+			-webkit-animation: fadeOut 1s ease-out 6s 1 normal forwards;
+			animation: fadeOut 1s ease-out 6s 1 normal forwards;
 		}
-		.alert-success:hover{
+		.alert-simple:hover{
 			background-color: rgba(135, 136, 135, 0.35);
 			transition:0.5s;
 		}
@@ -312,47 +304,58 @@
 			animation: blink-1 5s infinite both;
 		}
 	}
-
-
-
-/**
- * ----------------------------------------
- * animation blink-1
- * ----------------------------------------
- */
- @keyframes slidein {
-	from {
-	  width: 0%;
+	@-webkit-keyframes slideIn {
+		from {
+			width: 0%;
+		}
+	
+		to {
+			width: 2%;
+		}
 	}
-  
-	to {
-	  width: 2%;
+	@keyframes slideIn {
+		from {
+			width: 0%;
+		}
+	
+		to {
+			width: 2%;
+		}
 	}
-  }
-//   @keyframes fadeOut {
-// 	0% { opacity: 1; }
-// 	100% { opacity: 0; }
-//   }
-@-webkit-keyframes blink-1 {
-	0%,
-	50%,
-	100% {
-		opacity: 1;
+	@-webkit-keyframes fadeOut {
+		0% { opacity: 1; }
+		100% { 
+			pointer-events: none;
+			opacity: 0; 
+		}
 	}
-	25%,
-	75% {
-		opacity: 0;
+	@keyframes fadeOut {
+		0% { opacity: 1; }
+		100% { 
+			pointer-events: none;
+			opacity: 0; 
+		}
 	}
+	@-webkit-keyframes blink-1 {
+		0%,
+		50%,
+		100% {
+			opacity: 1;
+		}
+		25%,
+		75% {
+			opacity: 0;
+		}
 	}
-@keyframes blink-1 {
-	0%,
-	50%,
-	100% {
-		opacity: 1;
-	}
-	25%,
-	75% {
-		opacity: 0;
-	}
+	@keyframes blink-1 {
+		0%,
+		50%,
+		100% {
+			opacity: 1;
+		}
+		25%,
+		75% {
+			opacity: 0;
+		}
 	}
 }

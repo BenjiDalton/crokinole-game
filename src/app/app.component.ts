@@ -19,6 +19,8 @@ export class AppComponent implements AfterViewInit {
 	private _players: PlayerComponent[];
 	private world: WorldComponent;
 	public fillScoreboard: boolean = false;
+	public notifications: string[] = [];
+	public displayPopUp: boolean = false;
 	private gameStateSubscription: Subscription;
 	
 	constructor(private physicsService: PhysicsService, private gameState: GameStateService) {
@@ -30,8 +32,7 @@ export class AppComponent implements AfterViewInit {
 		// this.openPlayerInput();
 
 		this.gameStateSubscription = this.gameState.gameStateMessage.subscribe(message => {
-			console.log(message);
-			this.updateGameLog(message);
+			this.updatePlayerNotification(message);
 		});
 	}
 	public openPlayerInput(): void {
@@ -54,7 +55,7 @@ export class AppComponent implements AfterViewInit {
 		this._players = this.gameState.players;
 		setTimeout(() => {
 			this.fillScoreboard = true;
-		  });
+		});
 	}
 	public displayScoreboard(): void {
 		this._viewScoreboard = !this._viewScoreboard;
@@ -62,13 +63,21 @@ export class AppComponent implements AfterViewInit {
 	public displayLog(): void {
 		this._viewLog = !this._viewLog;
 	}
-	
-	private updateGameLog(message: string): void {
-		const gameLogBody = document.querySelector('.dropdown-body') as HTMLElement;
-		const newMessage = document.createElement('p');
-		newMessage.textContent = message;
-		gameLogBody.appendChild(newMessage);
-		gameLogBody.scrollTop = gameLogBody.scrollHeight;
+	private updatePlayerNotification(message: string): void {
+		// Push the new message to the notifications array
+		this.notifications.push(message);
+
+		// Show the pop-up notification
+		this.displayPopUp = true;
+
+		// Automatically hide the pop-up notification after a certain duration (e.g., 8000ms or 8 seconds)
+		// setTimeout(() => {
+		// this.notifications.shift(); // Remove the first notification from the array
+		// if (this.notifications.length === 0) {
+		// 	// If there are no more notifications, hide the pop-up
+		// 	this.displayPopUp = false;
+		// }
+		// }, 8000); 
 	}
 	public playerBallsRemaining(player: PlayerComponent): any[] {
 		let specificPlayer: any | undefined = this._players.find(p => p === player);

@@ -1,4 +1,7 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+
 <div class="container">
 	<div class="player-input" id="playerInput">
 		<div class="content">
@@ -8,18 +11,9 @@
 			<div class="button close-button" (click)="closePlayerInput()">Close</div>
 		  </div>
 	</div>
-
-		<div class="pop-up-notification">
-			<div class="alert fade alert-simple alert-success alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show">
-				<button class="cross-button"  data-dismiss="alert">
-					<span aria-hidden="true"><a>
-						<i class="fa fa-times cross"></i>
-						</a></span>
-					<span class="sr-only">Close</span> 
-					</button>
-					You successfullyread this important.
-				</div>
-		</div>
+	<div *ngFor="let notification of notifications" class="pop-up-notification">
+		<div class="alert-simple"> {{ notification }} </div>
+	</div>
 	<div class="game-area">
 		<div class="new-game-button" (click)="newGame()">new game</div>
 		<app-world></app-world>
