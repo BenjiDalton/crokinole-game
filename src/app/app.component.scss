@@ -238,12 +238,15 @@
 		top: 10%;
 		-webkit-animation-duration: 2s;
 		-webkit-animation-name: slidein;
-		-webkit-animation-iteration-count: infinite;
+		-webkit-animation-iteration-count: 2;
 		-webkit-animation-direction: alternate;
 		animation-duration: 2s;
 		animation-name: slidein;
-		animation-iteration-count: infinite;
+		animation-iteration-count: 2;
 		animation-direction: alternate;
+		// -webkit-animation: fadeOut 2s linear forwards;
+		// animation: fadeOut 2s linear forwards;
+
 
 		.alert>.start-icon {
 			margin-right: 0;
@@ -305,8 +308,8 @@
 		}
 		
 		.fa-times {
-			-webkit-animation: blink-1 2s infinite both;
-			animation: blink-1 2s infinite both;
+			-webkit-animation: blink-1 5s infinite both;
+			animation: blink-1 5s infinite both;
 		}
 	}
 
@@ -325,9 +328,11 @@
 	to {
 	  width: 2%;
 	}
-
-
   }
+//   @keyframes fadeOut {
+// 	0% { opacity: 1; }
+// 	100% { opacity: 0; }
+//   }
 @-webkit-keyframes blink-1 {
 	0%,
 	50%,
