@@ -64,8 +64,11 @@ export class GameStateService {
 	}
 
 	public newGame(): void {
-		const randomPlayer = Math.floor(Math.random() * this._players.length);
-		this.currentPlayer = this._players[randomPlayer];
+		const playerNames = Object.keys(this._players);
+		const randomIndex = Math.floor(Math.random() * playerNames.length);
+		const randomPlayerName = playerNames[randomIndex];
+		this.currentPlayer = this._players[randomPlayerName];
+
 		this.currentPlayer.turn = !this.currentPlayer.turn;
 		this.playerChange.next(this.currentPlayer.name);
 	}

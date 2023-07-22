@@ -212,4 +212,123 @@
 		}
 		
 	}
+
+	.new-game-button {
+		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 400px;
+		background-color: rgb(23, 23, 30);
+		left: 2%;
+		top: 10%;
+		border-radius: 4px;
+		text-align: center;
+		color: whitesmoke;
+		font-size: xx-large;
+		user-select: none;
+	}
+	.new-game-button:hover {
+		cursor: pointer;
+	}
+
+	.pop-up-notification {
+		position: absolute;
+		right: 25%;
+		top: 10%;
+		.alert>.start-icon {
+			margin-right: 0;
+			min-width: 20px;
+			text-align: center;
+		}
+		.alert>.start-icon {
+			margin-right: 5px;
+		}
+		.cross-button {
+			position: relative;
+			background-color: transparent;
+			border: none;
+			left: 95%;
+			.cross {
+				font-size: 18px;
+				color: rgb(164, 167, 185);
+				text-shadow: none;
+				background-color: transparent;
+			}
+		}
+
+		.alert-simple.alert-success {
+			display: flex;
+			position: absolute;
+			align-items: center;
+			border: 1px solid rgb(164, 167, 185);
+			background-color: rgb(164, 167, 185, 0.1);
+			box-shadow: 0px 0px 5px #161d38;
+			color: rgb(164, 167, 185);
+			font-size: 26px;
+			text-shadow: 2px 1px #00040a;
+			transition: 0.5s;
+			width: 500px;
+			height: 50px;
+			
+			z-index: 1;
+			top: 5%;
+		  	cursor:pointer;
+		}
+		.alert-success:hover{
+			background-color: rgba(135, 136, 135, 0.35);
+			transition:0.5s;
+		}
+		
+		.alert:before {
+			content: '';
+			position: absolute;
+			width: 0;
+			height: calc(100% - 44px);
+			border-left: 1px solid;
+			border-right: 2px solid;
+			border-bottom-right-radius: 3px;
+			border-top-right-radius: 3px;
+			left: 0;
+			top: 50%;
+			transform: translate(0,-50%);
+			height: 20px;
+		}
+		
+		.fa-times
+		{
+			-webkit-animation: blink-1 2s infinite both;
+			animation: blink-1 2s infinite both;
+		}
+	}
+
+
+
+/**
+ * ----------------------------------------
+ * animation blink-1
+ * ----------------------------------------
+ */
+@-webkit-keyframes blink-1 {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+@keyframes blink-1 {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
 }

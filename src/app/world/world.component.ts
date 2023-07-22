@@ -146,7 +146,7 @@ export class WorldComponent {
 	public newGame(): void {
 		for (let [playerID, player] of Object.entries(this.gameState.players)) {
 			this.generateGamePieces(playerID, player);
-		  }
+		}
 		return 
 	}
 	private generateGamePieces(playerID: string, player: any): void {
@@ -176,6 +176,7 @@ export class WorldComponent {
 		return Bodies.circle(x, y, 20, gamePieceOptions)
 	}
 	public updatePlayerColor(event: any): void {
+		console.log(event);
 		let colorChooser = document.getElementById(event.id);
 		this.playerTwoColor = event.value;
 		

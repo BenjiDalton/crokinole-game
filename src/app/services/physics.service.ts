@@ -122,7 +122,7 @@ export class PhysicsService {
 				if (pair.bodyB.label === 'gamePiece') {
 					switch (pair.bodyA.label) {
 						case 'boardCenter':
-							if (pair.bodyB.speed < 0.2 && Math.abs(pair.bodyB.position.x - pair.bodyA.position.x) < 1) {
+							if (pair.bodyB.speed < 0.2 && Math.abs(pair.bodyB.position.x - pair.bodyA.position.x) < 1 && Math.abs(pair.bodyB.position.y - pair.bodyA.position.y) < 1) {
 								this.activateCenter(pair.bodyA);
 							}
 							break;

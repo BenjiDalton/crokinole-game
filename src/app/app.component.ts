@@ -30,6 +30,7 @@ export class AppComponent implements AfterViewInit {
 		// this.openPlayerInput();
 
 		this.gameStateSubscription = this.gameState.gameStateMessage.subscribe(message => {
+			console.log(message);
 			this.updateGameLog(message);
 		});
 	}
