@@ -236,6 +236,15 @@
 		position: absolute;
 		right: 25%;
 		top: 10%;
+		-webkit-animation-duration: 2s;
+		-webkit-animation-name: slidein;
+		-webkit-animation-iteration-count: infinite;
+		-webkit-animation-direction: alternate;
+		animation-duration: 2s;
+		animation-name: slidein;
+		animation-iteration-count: infinite;
+		animation-direction: alternate;
+
 		.alert>.start-icon {
 			margin-right: 0;
 			min-width: 20px;
@@ -295,8 +304,7 @@
 			height: 20px;
 		}
 		
-		.fa-times
-		{
+		.fa-times {
 			-webkit-animation: blink-1 2s infinite both;
 			animation: blink-1 2s infinite both;
 		}
@@ -309,26 +317,37 @@
  * animation blink-1
  * ----------------------------------------
  */
+ @keyframes slidein {
+	from {
+	  width: 0%;
+	}
+  
+	to {
+	  width: 2%;
+	}
+
+
+  }
 @-webkit-keyframes blink-1 {
-  0%,
-  50%,
-  100% {
-    opacity: 1;
-  }
-  25%,
-  75% {
-    opacity: 0;
-  }
-}
+	0%,
+	50%,
+	100% {
+		opacity: 1;
+	}
+	25%,
+	75% {
+		opacity: 0;
+	}
+	}
 @keyframes blink-1 {
-  0%,
-  50%,
-  100% {
-    opacity: 1;
-  }
-  25%,
-  75% {
-    opacity: 0;
-  }
-}
+	0%,
+	50%,
+	100% {
+		opacity: 1;
+	}
+	25%,
+	75% {
+		opacity: 0;
+	}
+	}
 }
