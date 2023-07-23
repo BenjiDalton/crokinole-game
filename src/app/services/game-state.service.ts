@@ -62,8 +62,8 @@ export class GameStateService {
 		// 	};
 		// });
 		this.playerChangeSubscription = this.playerChange.subscribe((player: any) => {
-			for (const [key, value] of Object.entries(this._players)) {
-				if (value === player) {
+			for ( const [key, value] of Object.entries(this._players) ) {
+				if ( value === player ) {
 					this.sendCurrentPlayer(key, player)
 				}
 			  }

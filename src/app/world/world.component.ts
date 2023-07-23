@@ -23,6 +23,7 @@ export class WorldComponent implements AfterViewInit {
 	private boardCenterColor = 'black';
 	private boardCenterActiveColor = '#CE3D00'
 	private changePlayerSubscription: Subscription;
+	private activePiece: any;
 
 	constructor(private physicsService: PhysicsService, private gameState: GameStateService) { 
 	}
@@ -37,8 +38,7 @@ export class WorldComponent implements AfterViewInit {
 			*/
 			this.physicsService.removeBody(player.pieces[0])
 			player.pieces.splice(0, 1)
-			let newPiece = this.createGamePiece(playerID, this.width / 2, this.height / 1.3)
-			this.physicsService.addBody(newPiece)
+			this.physicsService.activePiece = this.createGamePiece(playerID, this.width / 2, this.height / 1.3);
 		});
 	}
 	public create(): void {
@@ -176,7 +176,6 @@ export class WorldComponent implements AfterViewInit {
 			this.physicsService.addBody(body);
 		});
 	}
-	
 	private createGamePiece(playerID: string, x: number, y: number): Body {
 		const gamePieceOptions: IBodyDefinition = {
 			label: 'gamePiece',
