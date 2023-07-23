@@ -13,13 +13,13 @@ import { Subscription } from 'rxjs';
 export class AppComponent implements AfterViewInit {
 	@ViewChild('gameArea', { read: ElementRef }) gameAreaElement: ElementRef;
 	@ViewChild('scoreBoardButton', { read: ElementRef }) scoreBoardButton: ElementRef;
-	title = 'poolwithbrooksie';
+	title = 'Crokinole';
 	private _viewScoreboard: boolean = false;
 	private _viewLog: boolean = false;
 	private _players: PlayerComponent[];
 	private world: WorldComponent;
 	public fillScoreboard: boolean = false;
-	public notifications: string[] = [];
+	public notifications: { message: string; color: string }[] = [];
 	public displayPopUp: boolean = false;
 	private gameStateSubscription: Subscription;
 	
@@ -31,8 +31,10 @@ export class AppComponent implements AfterViewInit {
 		this.world.create();
 		// this.openPlayerInput();
 
-		this.gameStateSubscription = this.gameState.gameStateMessage.subscribe(message => {
-			this.updatePlayerNotification(message);
+		this.gameStateSubscription = this.gameState.gameStateMessage.subscribe(result => {
+			let message = result[0];
+			let notificationColor = result[1]
+			this.updatePlayerNotification(message, notificationColor);
 		});
 	}
 	public openPlayerInput(): void {
@@ -63,21 +65,9 @@ export class AppComponent implements AfterViewInit {
 	public displayLog(): void {
 		this._viewLog = !this._viewLog;
 	}
-	private updatePlayerNotification(message: string): void {
-		// Push the new message to the notifications array
-		this.notifications.push(message);
-
-		// Show the pop-up notification
+	private updatePlayerNotification(message: string, notificationColor: any): void {
+		this.notifications.push({ message, color: notificationColor });
 		this.displayPopUp = true;
-
-		// Automatically hide the pop-up notification after a certain duration (e.g., 8000ms or 8 seconds)
-		// setTimeout(() => {
-		// this.notifications.shift(); // Remove the first notification from the array
-		// if (this.notifications.length === 0) {
-		// 	// If there are no more notifications, hide the pop-up
-		// 	this.displayPopUp = false;
-		// }
-		// }, 8000); 
 	}
 	public playerBallsRemaining(player: PlayerComponent): any[] {
 		let specificPlayer: any | undefined = this._players.find(p => p === player);

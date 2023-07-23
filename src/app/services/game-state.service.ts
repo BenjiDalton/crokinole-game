@@ -27,17 +27,22 @@ export class GameStateService {
 	private playerChangeSubscription: Subscription;
 	private currentPlayer = new PlayerComponent;
 	private playerChange = new Subject<string>();
-	private _gameStateMessage = new Subject<string>();
+	private _gameStateMessage = new Subject<any>();
 	public gameStateMessage = this._gameStateMessage.asObservable();
+	private notificationColors = {
+		'red': 'rgba(255, 37, 0)',
+		'green': 'rgba(37, 195, 16)',
+		'gold': 'rgba(232, 219, 21)',
+		'grey': 'rgba(199, 203, 208)'
+	}
 	
 	constructor(private physicsService: PhysicsService) {
 		this.Brooks.name = 'Brooks';
 		this.Ben.name = 'Ben';
 
 		this.scratchSubscription = this.physicsService.scratchSubject.subscribe(message => {
-			this.sendGameStateMessage(`SCRATCH`);
 			this.switchCurrentPlayer();
-			this.sendGameStateMessage(`It is now ${this.currentPlayer.name}'s turn`);
+			this.sendGameStateMessage(`It is now ${this.currentPlayer.name}'s turn`, this.notificationColors.grey);
 		});
 		// this.ballRemovedSubscription = this.physicsService.ballRemoved.subscribe(removedBall => {
 		// 	if (!this.currentPlayer.ballsRemaining.ballNumber.includes(removedBall.label)) {
@@ -59,7 +64,7 @@ export class GameStateService {
 		// 	};
 		// });
 		this.playerChangeSubscription = this.playerChange.subscribe((player: any) => {
-			this.sendGameStateMessage(`It is ${player}'s turn to start`);
+			this.sendGameStateMessage(`It is ${player}'s turn to start`, this.notificationColors.grey);
 		});
 	}
 
@@ -80,8 +85,8 @@ export class GameStateService {
 			};
 		};
 	}
-	private sendGameStateMessage(message: string): void {
-		this._gameStateMessage.next(message);
+	private sendGameStateMessage(message: string, notificationColor: any): void {
+		this._gameStateMessage.next([message, notificationColor]);
 	}
 	public get players(): any {
 		return this._players;

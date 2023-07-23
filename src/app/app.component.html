@@ -12,7 +12,9 @@
 		  </div>
 	</div>
 	<div *ngFor="let notification of notifications" class="pop-up-notification">
-		<div class="alert-simple"> {{ notification }} </div>
+		<div class="alert-simple" [ngStyle]="{ 'border-color': notification.color, 'color': notification.color }">
+			{{ notification.message }}
+		</div>
 	</div>
 	<div class="game-area">
 		<div class="new-game-button" (click)="newGame()">new game</div>
