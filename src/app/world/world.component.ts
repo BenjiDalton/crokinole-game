@@ -30,6 +30,7 @@ export class WorldComponent implements AfterViewInit {
 	
 	ngAfterViewInit(): void {
 		this.changePlayerSubscription = this.gameState.activePlayer.subscribe(result => {
+			console.log("result: ", result)
 			let playerID = result[0];
 			let player = result[1]
 			console.log(result)

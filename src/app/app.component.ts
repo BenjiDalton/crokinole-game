@@ -58,8 +58,8 @@ export class AppComponent implements AfterViewInit {
 			this.gameState.players.p2.name = 'Player 2';
 		}
 		modal.style.display = 'none';
-		this.newGame();
-		// this._players = this.gameState.players;
+		this.gameState.newGame();
+		this._players = this.gameState.players;
 	}
 	public addPlayer(): void {
 		const playerInputModal = document.querySelector('.content') as HTMLElement;

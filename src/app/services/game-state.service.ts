@@ -80,7 +80,9 @@ export class GameStateService {
 		this._gameStateMessage.next([message, notificationColor]);
 	}
 	private sendCurrentPlayer(playerID: string, player: PlayerComponent): void {
+		console.log(playerID, player)
 		this._activePlayer.next([playerID, player]);
+		console.log(this._activePlayer)
 	}
 	public get players(): any {
 		return this._players;
