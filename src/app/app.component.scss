@@ -79,7 +79,10 @@
 				box-shadow: 0 10px 35px rgba(81, 119, 81, 0.35);
 			}
 			.close-button:hover {
-				background-color: rgb(142, 60, 60);
+				box-shadow: 0 10px 20px rgba(54, 41, 131, 0.35);
+			}
+			.close-button:active {
+				background-color: rgba(96, 97, 96, 0.35);
 			}
 			.button:hover {
 				cursor: pointer;
@@ -218,7 +221,8 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 400px;
+		width: 200px;
+		height: 100px;
 		background-color: rgb(23, 23, 30);
 		left: 2%;
 		top: 10%;
@@ -230,6 +234,7 @@
 	}
 	.new-game-button:hover {
 		cursor: pointer;
+		background-color: rgb(23, 23, 30, 0.3);
 	}
 
 	.pop-up-notification {

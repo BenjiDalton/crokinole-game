@@ -16,11 +16,11 @@ Goals:
 */
 
 export class GameStateService {
-	private Brooks = new PlayerComponent;
-	private Ben = new PlayerComponent;
+	private player1 = new PlayerComponent;
+	private player2 = new PlayerComponent;
 	private _players: { [key: string]: PlayerComponent } = {
-		'p1': this.Brooks, 
-		'p2': this.Ben
+		'p1': this.player1, 
+		'p2': this.player2
 	};
 	private switchPlayersSubscription: Subscription;
 	private ballRemovedSubscription: Subscription;
@@ -39,15 +39,15 @@ export class GameStateService {
 	}
 	
 	constructor(private physicsService: PhysicsService) {
-		this.Brooks.name = 'Brooks';
-		this.Ben.name = 'Ben';
+		// this.Brooks.name = 'Brooks';
+		// this.Ben.name = 'Ben';
 		this.playerChangeSubscription = this.playerChange.subscribe((currentPlayer: any) => {
 			for ( const [playerID, player] of Object.entries(this._players) ) {
 				if ( player === this.currentPlayer ) {
 					this.sendCurrentPlayer(playerID, player);
 				}
 			}
-			this.sendGameStateMessage(`It is ${currentPlayer.name}'s turn to start`, this.notificationColors.grey);
+			this.sendGameStateMessage(`It is now ${currentPlayer.name}'s turn`, this.notificationColors.grey);
 		});
 
 		this.switchPlayersSubscription = this.physicsService.playerTurnOver

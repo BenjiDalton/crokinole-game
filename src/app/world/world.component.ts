@@ -25,7 +25,7 @@ export class WorldComponent implements AfterViewInit {
 	private changePlayerSubscription: Subscription;
 	private activePiece: any;
 
-	constructor(private physicsService: PhysicsService, private gameState: GameStateService) { 
+	constructor(private physicsService: PhysicsService, public gameState: GameStateService) { 
 	}
 	
 	ngAfterViewInit(): void {
