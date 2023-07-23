@@ -107,113 +107,107 @@
 		.game-canvas {
 			background-color: transparent !important;
 		}
-		.scoreboard-button {
+		.piece-container {
 			position: absolute;
-			display: flex;
-			flex-direction: row;
+			width: 10.8%;
+			height: 44.5%;
+			top: 31%;
+			background-color: transparent;
+			text-align: center;
 			justify-content: center;
-			width: 400px;
-			height: 50px;
-			align-items: center;
-			background-color: rgb(23, 23, 30);
-			border-radius: 4px;
-			padding: 0px 20px 0px;
-			font-weight: 600;
-			font-size: xx-large;
-			color: whitesmoke;
-			user-select: none;
-			left: 2%;
-			top: 10%;
-			.scoreboard-button-dropdown {
+			// pointer-events: none;
+		
+			.piece-container-shadow {
 				position: absolute;
-				display: none;
-				width: calc(100% - 5px);
-				height: 400px;
-				top: 100%;
-				background-color: rgb(23, 23, 30, 0.5);
-				border: 3px solid rgb(23, 23, 30, 0.8);
-				border-top-style: inset;
-				border-radius: 5px;
-				column-count: 2;
-				column-gap: 0;
+				height: 342px;
+				top: 13%;
+				width: 202px;
+				left: 13%;
+				background-color: transparent;
+				box-shadow: inset 2px 3px 25px #000000;
 				pointer-events: none;
-				.dropdown-column {
-					display: flex;
-					justify-content: center;
-					height: 100%;
-					overflow: hidden;
-					flex-direction: column;
-					.dropdown-column-item {
-						display: flex;
-						justify-content: center;
-						height: 20%;
-						color: whitesmoke;
-					}
-				}
 			}
-		}
-		.scoreboard-button.active {
-			.scoreboard-button-dropdown {
-				display: block;
-			}
-		}
-		.scoreboard-button:hover {
-			cursor: pointer;
-			background-color: rgb(49, 58, 70);
-		}
-		.scoreboard-button:hover .scoreboard-button-dropdown {
-			display: block;
-		}
-		.game-log-container {
-			position: absolute;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			width: 400px;
-			background-color: rgb(23, 23, 30);
-			left: 5%;
-			bottom: 10%;
-			flex-direction: column;
-			.game-log-button {
+			p {
+				all: unset;
 				position: relative;
+				bottom: 0;
+				font-size: 40px;
+				color: #f6ffff;
+				pointer-events: none;
+			}
+			input[type=color] {
+				all: unset;
+				-webkit-appearance: auto;
+				appearance: auto;
+				position: absolute;
+				background: #454653;
+				inline-size: 244px;
+				block-size: 27px;
+				bottom: 20%;
+				left: 5%;
+			}
+
+			.score-counter {
+				position: absolute;
 				display: flex;
+				flex-direction: row;
 				justify-content: center;
 				align-items: center;
-				width: 100%;
-				height: 50px;
-				border: 1px solid black;
+				width: 200px;
+				height: 100px;
+				background-color: rgb(0, 0, 0);
+				bottom: 2%;
+				border-radius: 4px;
 				text-align: center;
-				color: whitesmoke;
-				font-size: xx-large;
-				user-select: none;
-			}
-			.game-log-body {
-				position: absolute;
-				display: none;
-				bottom: 100%;
-				width: calc(100% - 5px);
-				height: 300px;
-				background-color: rgb(23, 23, 30, 0.5);
-				background-color: rgb(23, 23, 30, 0.5);
-				border: 3px solid rgb(23, 23, 30, 0.8);
-				border-top-style: inset;
-				color: whitesmoke;
-				overflow-x: hidden;
-				overflow-y: scroll;
-				font-size: 22px;
-				text-align: start;
-			}
-			.game-log-button.active {
-				.game-log-body {
-					display: block;
+		
+				input[type=number] {
+					position: absolute;
+					width: 80%;
+					height: 20%;
+					top: 5%;
+					padding: 5%;
+					margin: 5px 0 22px 0;
+					border: none;
+					text-align: center;
+					background: #f1f1f1;
+					font-size: 24px;	
+				}
+				.button {
+					position: relative;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: 20%;
+					height: 40%;
+					background-color: rgb(23, 23, 30);
+					top: 25%;
+					border-radius: 4px;
+					text-align: center;
+					color: whitesmoke;
+					font-size: 16px;
+					-webkit-user-select: none;
+					user-select: none;
+					z-index: 995;
+				}
+				.button:hover {
+					cursor: pointer;
+					background-color: rgb(148, 148, 148);
 				}
 			}
 		}
-		.game-log-container:hover{
-			cursor: pointer;
-			background-color: rgb(49, 58, 70);
-		}
 		
+		
+		.board-shadow {
+			position: absolute;
+			left: 34.3%;
+			top: 19%;
+			width: 800px;
+			height: 800px;
+			border-radius: 50%;
+			background-color: transparent;
+			box-shadow: 0px 0px 15px 5px #5d5b5b;
+			pointer-events: none;
+		}
 	}
 
 	.new-game-button {

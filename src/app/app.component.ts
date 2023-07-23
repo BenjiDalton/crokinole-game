@@ -16,14 +16,14 @@ export class AppComponent implements AfterViewInit {
 	title = 'Crokinole';
 	private _viewScoreboard: boolean = false;
 	private _viewLog: boolean = false;
-	private _players: PlayerComponent[];
+	public _players: PlayerComponent[];
 	private world: WorldComponent;
 	public fillScoreboard: boolean = false;
 	public notifications: { message: string; color: string }[] = [];
 	public displayPopUp: boolean = false;
 	private gameStateSubscription: Subscription;
 	
-	constructor(private physicsService: PhysicsService, private gameState: GameStateService) {
+	constructor(private physicsService: PhysicsService, public gameState: GameStateService) {
 	}
 	ngAfterViewInit(): void {
 		this.physicsService.renderElement = this.gameAreaElement.nativeElement;
@@ -50,14 +50,16 @@ export class AppComponent implements AfterViewInit {
 		if ( playerNameEntry1?.value ) {
 			this.gameState.players.p1.name = playerNameEntry1?.value;
 		} else {
-			this.gameState.players.p1.name = 'Player 1'
+			this.gameState.players.p1.name = 'Player 1';
 		}
 		if ( playerNameEntry2?.value ) {
 			this.gameState.players.p2.name = playerNameEntry2?.value;
 		} else {
-			this.gameState.players.p2.name = 'Player 2'
+			this.gameState.players.p2.name = 'Player 2';
 		}
 		modal.style.display = 'none';
+		this.gameState.newGame();
+		this._players = this.gameState.players;
 	}
 	public addPlayer(): void {
 		const playerInputModal = document.querySelector('.content') as HTMLElement;
@@ -83,24 +85,10 @@ export class AppComponent implements AfterViewInit {
 		this.notifications.push({ message, color: notificationColor });
 		this.displayPopUp = true;
 	}
-	public playerBallsRemaining(player: PlayerComponent): any[] {
-		let specificPlayer: any | undefined = this._players.find(p => p === player);
-		let indexOffset = 1;
-		if (specificPlayer.ballType === 'stripes') {
-			indexOffset = 8;
-		}
-		let totalBalls = 8;
-		const ballsRemaining = Array(totalBalls)
-		.fill(null)
-		.map((_, index) => {
-			const ballNumber = index + indexOffset;
-			return specificPlayer.ballsRemaining.ballNumber.includes(ballNumber) ? ballNumber : null;
-		});
-		return ballsRemaining
-	}
-	public playerBallType(player: PlayerComponent): string {
-		let specificPlayer: any | undefined = this._players.find(p => p === player);
-		return specificPlayer.ballType
+	public updateScore(elementID: string, value: any): void {
+		const inputElement = document.getElementById(elementID) as HTMLInputElement;
+		const currentValue = parseInt(inputElement.value);
+		inputElement.value = currentValue + value;
 	}
 	public get players() {
 		return this._players
