@@ -44,7 +44,7 @@ export class GameStateService {
 		this.playerChangeSubscription = this.playerChange.subscribe((currentPlayer: any) => {
 			for ( const [playerID, player] of Object.entries(this._players) ) {
 				if ( player === this.currentPlayer ) {
-					this.sendCurrentPlayer(playerID, player)
+					this.sendCurrentPlayer(playerID, player);
 				}
 			}
 			this.sendGameStateMessage(`It is ${currentPlayer.name}'s turn to start`, this.notificationColors.grey);

@@ -54,10 +54,8 @@ export class PhysicsService {
 	}
 	public set activePiece(piece: any) {
 		this._activePiece = piece;
-		console.log("active piece: ", this._activePiece);
 		this.addBody(this._activePiece);
 		this.handlePlayersTurn();
-		
 	}
 
   	constructor() { 
@@ -165,6 +163,14 @@ export class PhysicsService {
 		let collisionInfo: null | { body: any; timestamp: number; } = null;
 		Events.on(this.mouseConstraint, "enddrag", event => {
 			if ( this._activePiece === event.body ) {
+				collisionInfo = {
+					body: event.body,
+					timestamp: performance.now() 
+				};
+				// setTimeout(() => {
+				// 		this.determineScore();
+				// 	}, 5000);
+
 				this._playerTurnOver.next(true);
 			}
 		});
@@ -172,23 +178,87 @@ export class PhysicsService {
 			let pairs = event.pairs;
 			for ( let i = 0, j = pairs.length; i < j; ++i ) {
 			  let pair = pairs[i];
+			//   this.collisionDetector.bodies.push()
 				if ( pair.bodyA.label.includes('gamePiece') && pair.bodyB.label.includes('gamePiece') ) {
-					if ( pair.bodyA.label === pair.bodyB.label ) {
-						console.log("Invalid move. You must hit the other player's pieces");
-						setTimeout(() => {
-							this.removeBody(pair.bodyB);	
-						}, 5000);
-					return
+					if (collisionInfo && collisionInfo.body === pair.bodyB) {
+						if (pair.bodyA.label === pair.bodyB.label) {
+							console.log("Invalid move. You must hit the other player's pieces first");
+							setTimeout(() => {
+								this.removeBody(pair.bodyB);  
+								
+							}, 5000);
+						}
+						collisionInfo = null;
+						return;
 					}
-				return
-				}
+				return;
+				} 
+				// else {
+				// 	console.log("Invalid move. You must hit the other player's pieces first");
+				// 	setTimeout(() => {
+				// 		this.removeBody(pair.bodyB);  
+						
+				// 	}, 5000);
+				// }
 			}
 		});
+		
 	}
 	public removeBody(body: Body): void {
 		const index = this.engine.world.bodies.indexOf(body);
 		if ( index !== -1 ) {
 			Composite.remove(this.engine.world, body);
 		}
+	}
+	public determineScore(): void {
+		// const scores: { [key: string]: number} = {
+		// 	'p1': 0,
+		// 	'p2': 0
+		// }
+		// const scoredPieces: Map<string, Set<string>> = new Map();
+		// Events.on(this.engine, 'collisionActive', event => {
+		// 	let pairs = event.pairs;
+			
+		// 	for ( let [playerID, score] of Object.entries(scores) ) {
+		// 		if (!scoredPieces.has(playerID)) {
+		// 			scoredPieces.set(playerID, new Set());
+		// 		}
+		// 		for ( let i = 0, j = pairs.length; i != j; ++i ) {
+		// 			let pair = pairs[i];
+		// 			if ( pair.bodyB.label.includes(playerID) && pair.bodyB.label.includes('gamePiece') ) {
+		// 				if ( !scoredPieces.get(playerID)?.has(pair.bodyA.id.toString()) ) {
+		// 					switch ( pair.bodyA.label ) {
+		// 						case 'pieceContainer':
+		// 							break;
+		// 						case 'boardCenter':
+		// 							if ( pair.bodyB.speed < 0.2 && Math.abs(pair.bodyB.position.x - pair.bodyA.position.x) < 1 && Math.abs(pair.bodyB.position.y - pair.bodyA.position.y) < 1 ) {
+		// 								this.activateCenter(pair.bodyA);
+		// 							}
+		// 							break;
+		// 						case 'innerCircle':
+		// 							if ( pair.bodyB.speed < 0.2 ) {
+		// 								score += 15;
+		// 							}
+		// 							break;	
+		// 						case 'middleCircle':
+		// 							if ( pair.bodyB.speed < 0.2 ) {
+		// 								score += 10;
+		// 							}
+		// 							break;
+		// 						case 'outerCircle':
+		// 							if ( pair.bodyB.speed < 0.2 ) {
+		// 								score += 5;
+		// 							}
+		// 							break;	
+		// 					};
+		// 					scoredPieces.get(playerID)?.add(pair.bodyA.id.toString());
+		// 					scores[playerID] = score;
+		// 					console.log(scores)
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// });
+		
 	}
 }
