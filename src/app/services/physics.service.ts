@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Bodies, Body, Composite, Constraint, Engine, Events, Mouse, MouseConstraint, Render, Runner, Vector, Common, Vertices, Collision, IBodyDefinition, Composites } from 'matter-js';
-import { Subject } from 'rxjs';
+import { Body, Composite, Engine, Events, Mouse, MouseConstraint, Render, Runner} from 'matter-js';
+import { WorldComponent } from '../world/world.component';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,10 @@ export class PhysicsService {
     private runner = Runner.create({
 		delta: 144
 	});
+	private _renderElement: HTMLCanvasElement;
 	private mouse: Mouse;
+	private mouseConstraint: any;
+	
 	private width = 2040;
 	private height = 1290;
 	private normalPegState = '#F5CC7C';
@@ -22,11 +25,6 @@ export class PhysicsService {
 	private boardCenterRadius = 21;
 	private boardCenterColor = 'black';
 	private boardCenterActiveColor = '#CE3D00'
-	private _renderElement: HTMLCanvasElement;
-	private mouseConstraint: any;
-
-	private _scratchSubject = new Subject<string>();
-	public scratchSubject = this._scratchSubject.asObservable();
 
 
 	public set renderElement(element: HTMLCanvasElement) {
@@ -51,7 +49,8 @@ export class PhysicsService {
 		return this._renderElement;
 	}
 
-  	constructor() { }
+  	constructor() { 
+	}
 
 	private setupEngine(): void {
 		this.engine.gravity.y = 0;
@@ -153,7 +152,10 @@ export class PhysicsService {
 			};
 		});
 	}
-	public sendScratch(): void {
-		this._scratchSubject.next('ooooof ya scratched');
+	public removeBody(body: Body): void {
+		const index = this.engine.world.bodies.indexOf(body);
+		if (index !== -1) {
+			Composite.remove(this.engine.world, body);
+		  }
 	}
 }

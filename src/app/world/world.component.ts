@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { PhysicsService } from '../services/physics.service';
-import { Body, Bodies, Composite, IBodyDefinition } from 'matter-js';
-import { PlayerComponent } from '../player/player.component';
+import { Body, Bodies, IBodyDefinition, Composite } from 'matter-js';
 import { GameStateService } from '../services/game-state.service';
-import { KeyValuePipe } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-world',
   templateUrl: './world.component.html',
   styleUrls: ['./world.component.scss']
 })
-export class WorldComponent {
+export class WorldComponent implements AfterViewInit {
 
 	private width = 2040;
 	private height = 1290;
@@ -23,16 +22,31 @@ export class WorldComponent {
 	private boardCenterRadius = 21;
 	private boardCenterColor = 'black';
 	private boardCenterActiveColor = '#CE3D00'
+	private changePlayerSubscription: Subscription;
 
 	constructor(private physicsService: PhysicsService, private gameState: GameStateService) { 
 	}
-
+	
+	ngAfterViewInit(): void {
+		this.changePlayerSubscription = this.gameState.activePlayer.subscribe(result => {
+			let playerID = result[0];
+			let player = result[1]
+			/* 
+			remove the first body in specific player's pieces
+			create a new piece that is then placed on the board for the player to use
+			*/
+			this.physicsService.removeBody(player.pieces[0])
+			player.pieces.splice(0, 1)
+			let newPiece = this.createGamePiece(playerID, this.width / 2, this.height / 1.3)
+			this.physicsService.addBody(newPiece)
+		});
+	}
 	public create(): void {
 		this.generateGameBorders();
 		this.generateBoard();
 		this.generateBoardPegs();
 		this.generateGamePieceContainers();
-		this.newGame();
+		this.assignPlayerPieces();
 	}
 	private generateBoard(): void {
 		const boardOutsideOptions: Matter.IChamferableBodyDefinition = {
@@ -143,7 +157,7 @@ export class WorldComponent {
 			this.physicsService.addBody(body);
 		}
 	}
-	public newGame(): void {
+	public assignPlayerPieces(): void {
 		for (let [playerID, player] of Object.entries(this.gameState.players)) {
 			this.generateGamePieces(playerID, player);
 		}
@@ -163,12 +177,12 @@ export class WorldComponent {
 		});
 	}
 	
-	private createGamePiece(player: any, x: number, y: number): Body {
+	private createGamePiece(playerID: string, x: number, y: number): Body {
 		const gamePieceOptions: IBodyDefinition = {
 			label: 'gamePiece',
 			frictionAir: 0.04,
 			render: { 
-			fillStyle: player === 'p1' ? this.playerOneColor : this.playerTwoColor 
+			fillStyle: playerID === 'p1' ? this.playerOneColor : this.playerTwoColor 
 			},
 			restitution: 0.5,
 			density: 1700

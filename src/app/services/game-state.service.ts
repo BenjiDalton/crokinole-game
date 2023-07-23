@@ -26,9 +26,11 @@ export class GameStateService {
 	private ballRemovedSubscription: Subscription;
 	private playerChangeSubscription: Subscription;
 	private currentPlayer = new PlayerComponent;
-	private playerChange = new Subject<string>();
+	private playerChange = new Subject<PlayerComponent>();
 	private _gameStateMessage = new Subject<any>();
 	public gameStateMessage = this._gameStateMessage.asObservable();
+	private _activePlayer = new Subject<any>();
+	public activePlayer = this._activePlayer.asObservable();
 	private notificationColors = {
 		'red': 'rgba(255, 37, 0)',
 		'green': 'rgba(37, 195, 16)',
@@ -40,10 +42,6 @@ export class GameStateService {
 		this.Brooks.name = 'Brooks';
 		this.Ben.name = 'Ben';
 
-		this.scratchSubscription = this.physicsService.scratchSubject.subscribe(message => {
-			this.switchCurrentPlayer();
-			this.sendGameStateMessage(`It is now ${this.currentPlayer.name}'s turn`, this.notificationColors.grey);
-		});
 		// this.ballRemovedSubscription = this.physicsService.ballRemoved.subscribe(removedBall => {
 		// 	if (!this.currentPlayer.ballsRemaining.ballNumber.includes(removedBall.label)) {
 		// 		this.consecutiveShots = 0;
@@ -64,8 +62,14 @@ export class GameStateService {
 		// 	};
 		// });
 		this.playerChangeSubscription = this.playerChange.subscribe((player: any) => {
-			this.sendGameStateMessage(`It is ${player}'s turn to start`, this.notificationColors.grey);
+			for (const [key, value] of Object.entries(this._players)) {
+				if (value === player) {
+					this.sendCurrentPlayer(key, player)
+				}
+			  }
+			this.sendGameStateMessage(`It is ${player.name}'s turn to start`, this.notificationColors.grey);
 		});
+		
 	}
 
 	public newGame(): void {
@@ -75,7 +79,7 @@ export class GameStateService {
 		this.currentPlayer = this._players[randomPlayerName];
 
 		this.currentPlayer.turn = !this.currentPlayer.turn;
-		this.playerChange.next(this.currentPlayer.name);
+		this.playerChange.next(this.currentPlayer);
 	}
 	private switchCurrentPlayer(): void {
 		for (let player of this._players) {
@@ -87,6 +91,9 @@ export class GameStateService {
 	}
 	private sendGameStateMessage(message: string, notificationColor: any): void {
 		this._gameStateMessage.next([message, notificationColor]);
+	}
+	private sendCurrentPlayer(playerID: string, player: PlayerComponent): void {
+		this._activePlayer.next([playerID, player]);
 	}
 	public get players(): any {
 		return this._players;
