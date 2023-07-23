@@ -178,7 +178,7 @@ export class WorldComponent implements AfterViewInit {
 	}
 	private createGamePiece(playerID: string, x: number, y: number): Body {
 		const gamePieceOptions: IBodyDefinition = {
-			label: 'gamePiece',
+			label: `gamePiece_${playerID}`,
 			frictionAir: 0.04,
 			render: { 
 			fillStyle: playerID === 'p1' ? this.playerOneColor : this.playerTwoColor 

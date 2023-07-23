@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { AfterViewInit, Injectable } from '@angular/core';
 import { PhysicsService } from './physics.service';
 import { PlayerComponent } from '../player/player.component';
 import { Bodies, Body, Composite, Composites, IBodyDefinition } from 'matter-js';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, debounceTime } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +18,11 @@ Goals:
 export class GameStateService {
 	private Brooks = new PlayerComponent;
 	private Ben = new PlayerComponent;
-	private _players: any = {
+	private _players: { [key: string]: PlayerComponent } = {
 		'p1': this.Brooks, 
 		'p2': this.Ben
 	};
-	private scratchSubscription: Subscription;
+	private switchPlayersSubscription: Subscription;
 	private ballRemovedSubscription: Subscription;
 	private playerChangeSubscription: Subscription;
 	private currentPlayer = new PlayerComponent;
@@ -41,37 +41,21 @@ export class GameStateService {
 	constructor(private physicsService: PhysicsService) {
 		this.Brooks.name = 'Brooks';
 		this.Ben.name = 'Ben';
-
-		// this.ballRemovedSubscription = this.physicsService.ballRemoved.subscribe(removedBall => {
-		// 	if (!this.currentPlayer.ballsRemaining.ballNumber.includes(removedBall.label)) {
-		// 		this.consecutiveShots = 0;
-		// 		this.sendGameStateMessage(`Ooops. ${this.currentPlayer.name} hit the wrong ball in`);
-		// 		this.switchCurrentPlayer();
-		// 		this.sendGameStateMessage(`It is now ${this.currentPlayer.name}'s turn`);
-		// 	};
-		// 	if (removedBall.label === 8 && this.currentPlayer.ballsRemaining.ballNumber.length > 2) {
-		// 		this.sendGameStateMessage(`${this.currentPlayer.name} just hit the 8 ball in early and insta lost lmao`);
-		// 	};
-		// 	if (this.currentPlayer.ballsRemaining.ballNumber.includes(removedBall.label)) {
-		// 		this.consecutiveShots++;
-		// 		this.currentPlayer.ballsRemaining.ballInfo.pop(removedBall);
-		// 		this.currentPlayer.ballsRemaining.ballNumber.splice(this.currentPlayer.ballsRemaining.ballNumber.indexOf(removedBall.label), 1);
-		// 		if (this.consecutiveShots > 3) {
-		// 			this.sendGameStateMessage(`DAMN! ${this.currentPlayer.name} has hit ${this.consecutiveShots} in a row!`);
-		// 		};
-		// 	};
-		// });
-		this.playerChangeSubscription = this.playerChange.subscribe((player: any) => {
-			for ( const [key, value] of Object.entries(this._players) ) {
-				if ( value === player ) {
-					this.sendCurrentPlayer(key, player)
+		this.playerChangeSubscription = this.playerChange.subscribe((currentPlayer: any) => {
+			for ( const [playerID, player] of Object.entries(this._players) ) {
+				if ( player === this.currentPlayer ) {
+					this.sendCurrentPlayer(playerID, player)
 				}
-			  }
-			this.sendGameStateMessage(`It is ${player.name}'s turn to start`, this.notificationColors.grey);
+			}
+			this.sendGameStateMessage(`It is ${currentPlayer.name}'s turn to start`, this.notificationColors.grey);
 		});
-		
-	}
 
+		this.switchPlayersSubscription = this.physicsService.playerTurnOver
+			.pipe(debounceTime(5000))
+			.subscribe(() => {
+				this.switchCurrentPlayer();
+			});
+	}
 	public newGame(): void {
 		const playerNames = Object.keys(this._players);
 		const randomIndex = Math.floor(Math.random() * playerNames.length);
@@ -82,10 +66,11 @@ export class GameStateService {
 		this.playerChange.next(this.currentPlayer);
 	}
 	private switchCurrentPlayer(): void {
-		for (let player of this._players) {
-			player.turn = !player.turn;
-			if (player.turn) {
+		for ( const [playerID, player] of Object.entries(this._players) ) {
+			player.turn = !player.turn
+			if ( player.turn ) {
 				this.currentPlayer = player;
+				this.playerChange.next(this.currentPlayer);
 			};
 		};
 	}

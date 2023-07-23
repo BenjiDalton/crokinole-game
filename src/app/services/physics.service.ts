@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Body, Collision, Composite, Detector, Engine, Events, Mouse, MouseConstraint, Pairs, Render, Runner } from 'matter-js';
 import { WorldComponent } from '../world/world.component';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,8 @@ export class PhysicsService {
 	private boardCenterColor = 'black';
 	private boardCenterActiveColor = '#CE3D00'
 	private _activePiece: any;
+	private _playerTurnOver = new Subject<any>();
+	public playerTurnOver = this._playerTurnOver.asObservable();
 
 
 	public set renderElement(element: HTMLCanvasElement) {
@@ -51,50 +54,10 @@ export class PhysicsService {
 	}
 	public set activePiece(piece: any) {
 		this._activePiece = piece;
+		console.log("active piece: ", this._activePiece);
 		this.addBody(this._activePiece);
-		Events.on(this.mouseConstraint, 'startdrag', event => {
-			if ( event.body.label === 'gamePiece' && this._activePiece !== event.body ) {
-				console.log("hey dont touch that")
-			}
-		});
-		Events.on(this.mouseConstraint, "enddrag", event => {
-			if ( this._activePiece === event.body ) {
-				
-				Events.on(this.engine, 'collisionStart', event =>  {
-					let pairs = event.pairs;
-					for ( let i = 0, j = pairs.length; i != j; ++i ) {
-						let pair = pairs[i];
-						if ( pair.bodyA.label === 'gamePiece' && pair.bodyB.label === 'gamePiece' ) {
-							console.log("body A: ", pair.bodyA, "body B: ", pair.bodyB)
-						}
-						
-						// if ( pair.bodyB.label === 'gamePiece' ) {
-						// 	switch (pair.bodyA.label) {
-						// 		case 'boundary':
-						// 			pair.bodyB.frictionAir = 1;
-						// 			break;
-						// 		case 'peg': 
-						// 			this.activatePeg(pair.bodyA);
-						// 			break;
-						// 	};
-						// };
-					};
-				});
-				// for ( const otherPiece of this.engine.world.bodies ) {
-				// 	if ( otherPiece.label === 'gamePiece' ) {
-				// 		if ( otherPiece !== this._activePiece ) {
-				// 			// console.log(Detector.collisions())
-				// 			// if ( Collision.collides(this._activePiece, otherPiece) !== null ) {
-
-				// 			// 	console.log("hello")
-
-				// 			// 	console.log(`${this._activePiece} collided with ${otherPiece}!`);
-				// 			// };
-				// 		}
-				// 	}
-				// }	
-			}
-		});
+		this.handlePlayersTurn();
+		
 	}
 
   	constructor() { 
@@ -140,16 +103,14 @@ export class PhysicsService {
 		setTimeout(() => {
 			center.render.fillStyle = this.boardCenterColor;
 			center.circleRadius = this.boardCenterRadius;
-		  }, 
-		  500
-		);
+		}, 500);
 	}
 	private collisionDetect(): void {
 		Events.on(this.engine, 'collisionStart', event =>  {
 			let pairs = event.pairs;
 			for ( let i = 0, j = pairs.length; i != j; ++i ) {
 				let pair = pairs[i];
-				if ( pair.bodyB.label === 'gamePiece' ) {
+				if ( pair.bodyB.label.includes('gamePiece') ) {
 					switch (pair.bodyA.label) {
 						case 'boundary':
 							pair.bodyB.frictionAir = 1;
@@ -165,7 +126,7 @@ export class PhysicsService {
 			let pairs = event.pairs;
 			for ( let i = 0, j = pairs.length; i != j; ++i ) {
 				let pair = pairs[i];
-				if ( pair.bodyB.label === 'gamePiece' ) {
+				if ( pair.bodyB.label.includes('gamePiece') ) {
 					switch ( pair.bodyA.label ) {
 						case 'boardCenter':
 							if ( pair.bodyB.speed < 0.2 && Math.abs(pair.bodyB.position.x - pair.bodyA.position.x) < 1 && Math.abs(pair.bodyB.position.y - pair.bodyA.position.y) < 1 ) {
@@ -189,7 +150,7 @@ export class PhysicsService {
 			let pairs = event.pairs;
 			for ( let i = 0, j = pairs.length; i != j; ++i ) {
 				const pair = pairs[i];
-				if ( pair.bodyB.label === 'gamePiece' ) {
+				if ( pair.bodyB.label.includes('gamePiece') ) {
 					switch ( pair.bodyA.label ) {
 						case 'boundary': 
 							pair.bodyB.frictionAir = 0.04;
@@ -197,6 +158,31 @@ export class PhysicsService {
 					};
 				};
 			};
+		});
+		
+	}
+	private handlePlayersTurn(): void {
+		let collisionInfo: null | { body: any; timestamp: number; } = null;
+		Events.on(this.mouseConstraint, "enddrag", event => {
+			if ( this._activePiece === event.body ) {
+				this._playerTurnOver.next(true);
+			}
+		});
+		Events.on(this.engine, 'collisionStart', event => {
+			let pairs = event.pairs;
+			for ( let i = 0, j = pairs.length; i < j; ++i ) {
+			  let pair = pairs[i];
+				if ( pair.bodyA.label.includes('gamePiece') && pair.bodyB.label.includes('gamePiece') ) {
+					if ( pair.bodyA.label === pair.bodyB.label ) {
+						console.log("Invalid move. You must hit the other player's pieces");
+						setTimeout(() => {
+							this.removeBody(pair.bodyB);	
+						}, 5000);
+					return
+					}
+				return
+				}
+			}
 		});
 	}
 	public removeBody(body: Body): void {
