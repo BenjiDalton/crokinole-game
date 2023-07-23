@@ -57,6 +57,8 @@ export class GameStateService {
 			});
 	}
 	public newGame(): void {
+		console.log("new game")
+		console.log(this._players)
 		const playerNames = Object.keys(this._players);
 		const randomIndex = Math.floor(Math.random() * playerNames.length);
 		const randomPlayerName = playerNames[randomIndex];

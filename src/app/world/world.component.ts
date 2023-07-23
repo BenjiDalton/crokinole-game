@@ -32,6 +32,7 @@ export class WorldComponent implements AfterViewInit {
 		this.changePlayerSubscription = this.gameState.activePlayer.subscribe(result => {
 			let playerID = result[0];
 			let player = result[1]
+			console.log(result)
 			/* 
 			remove the first body in specific player's pieces
 			create a new piece that is then placed on the board for the player to use
@@ -150,6 +151,8 @@ export class WorldComponent implements AfterViewInit {
 		};
 		const playerOneContainer = Bodies.rectangle(this.width * 0.13, this.height / 2, 200, 340, pieceContainerOptions);
 		const playerTwoContainer = Bodies.rectangle(this.width * 0.87, this.height / 2, 200, 340, pieceContainerOptions);
+		playerOneContainer.label = 'p1_pieceContainer';
+		playerTwoContainer.label = 'p2_pieceContainer';
 		playerOneContainer.render.strokeStyle = this.playerOneColor;
 		playerTwoContainer.render.strokeStyle = this.playerTwoColor;
 
@@ -188,10 +191,19 @@ export class WorldComponent implements AfterViewInit {
 		};
 		return Bodies.circle(x, y, 20, gamePieceOptions)
 	}
-	public updatePlayerColor(event: any): void {
-		console.log(event);
-		let colorChooser = document.getElementById(event.id);
-		this.playerTwoColor = event.value;
+	public updatePlayerColor(playerID: string, target: any): void {
+		for ( let body of this.physicsService.engine.world.bodies ) {
+			if ( body.label.includes(playerID) && !body.label.includes('pieceContainer') ) {
+				body.render.fillStyle = target.value;
+			}
+			if ( body.label.includes(playerID) && body.label.includes('pieceContainer') ) {
+				body.render.strokeStyle = target.value;
+			}
+		}
+		
+		console.log(target.value);
+		// let colorChooser = document.getElementById(event.id);
+		// this.playerTwoColor = event.value;
 		
 	}
 }

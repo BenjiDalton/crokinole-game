@@ -17,7 +17,7 @@ export class AppComponent implements AfterViewInit {
 	private _viewScoreboard: boolean = false;
 	private _viewLog: boolean = false;
 	public _players: PlayerComponent[];
-	private world: WorldComponent;
+	public world: WorldComponent;
 	public fillScoreboard: boolean = false;
 	public notifications: { message: string; color: string }[] = [];
 	public displayPopUp: boolean = false;
@@ -58,8 +58,8 @@ export class AppComponent implements AfterViewInit {
 			this.gameState.players.p2.name = 'Player 2';
 		}
 		modal.style.display = 'none';
-		this.gameState.newGame();
-		this._players = this.gameState.players;
+		this.newGame();
+		// this._players = this.gameState.players;
 	}
 	public addPlayer(): void {
 		const playerInputModal = document.querySelector('.content') as HTMLElement;

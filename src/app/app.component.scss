@@ -115,7 +115,7 @@
 			background-color: transparent;
 			text-align: center;
 			justify-content: center;
-			// pointer-events: none;
+			pointer-events: none;
 		
 			.piece-container-shadow {
 				position: absolute;
@@ -187,6 +187,7 @@
 					font-size: 16px;
 					-webkit-user-select: none;
 					user-select: none;
+					pointer-events: all;
 					z-index: 995;
 				}
 				.button:hover {
