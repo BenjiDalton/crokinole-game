@@ -190,36 +190,36 @@ export class PhysicsService {
 				};
 
 				activeCollisions = [];
-				setTimeout(() => {
-					// for ( let collision of activeCollisions ) {
-					// 	console.log("collision: ", collision)
-					// }
-					// console.log("active collisions: ", activeCollisions)
-					// let scoreCollision = activeCollisions[activeCollisions.length - 1];
-					// console.log('score collision', scoreCollision)
-					// scoreCollision
-					// Process the collected active collisions and determine the score
-					// for ( const pairs of activeCollisions ) {
-					// 	for ( let i = 0, j = activeCollisions.length; i < j; ++i ) {
+				// setTimeout(() => {
+				// 	// for ( let collision of activeCollisions ) {
+				// 	// 	console.log("collision: ", collision)
+				// 	// }
+				// 	// console.log("active collisions: ", activeCollisions)
+				// 	// let scoreCollision = activeCollisions[activeCollisions.length - 1];
+				// 	// console.log('score collision', scoreCollision)
+				// 	// scoreCollision
+				// 	// Process the collected active collisions and determine the score
+				// 	// for ( const pairs of activeCollisions ) {
+				// 	// 	for ( let i = 0, j = activeCollisions.length; i < j; ++i ) {
 							
-					// 	}
-					// 	console.log(pairs)
+				// 	// 	}
+				// 	// 	console.log(pairs)
 						
-					//   for (let [playerID, score] of Object.entries(scores)) {
-					// 	for (let [circle, points] of Object.entries({ 'outerCircle': 5, 'middleCircle': 10, 'innerCircle': 15, 'boardCenter': 20 })) {
-					// 	  if ( pairs.bodyA.label.includes(circle) && pair.bodyB.label.includes(playerID) ) {
-					// 		// Increase the player's score accordingly
-					// 		scores[playerID] += points;
-					// 		console.log(pair.bodyB.label, ' in ', circle, ' for ', points, ' points ');
-					// 		console.log('Player', playerID, 'score:', scores[playerID]);
-					// 	  }
-					// 	}
-					//   }
-					// }
-					// this.determineScore();
-					this._playerTurnOver.next(true);
-				}, 5000);
-				
+				// 	//   for (let [playerID, score] of Object.entries(scores)) {
+				// 	// 	for (let [circle, points] of Object.entries({ 'outerCircle': 5, 'middleCircle': 10, 'innerCircle': 15, 'boardCenter': 20 })) {
+				// 	// 	  if ( pairs.bodyA.label.includes(circle) && pair.bodyB.label.includes(playerID) ) {
+				// 	// 		// Increase the player's score accordingly
+				// 	// 		scores[playerID] += points;
+				// 	// 		console.log(pair.bodyB.label, ' in ', circle, ' for ', points, ' points ');
+				// 	// 		console.log('Player', playerID, 'score:', scores[playerID]);
+				// 	// 	  }
+				// 	// 	}
+				// 	//   }
+				// 	// }
+				// 	// this.determineScore();
+				// 	
+				// }, 5000);
+				this._playerTurnOver.next(true);
 			}
 		});
 		Events.on(this.engine, 'collisionStart', event => {

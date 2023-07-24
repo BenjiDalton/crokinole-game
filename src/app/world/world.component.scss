@@ -192,7 +192,6 @@
     }
     
 }
-    
 .piece-container-left {
     left: 8.2%;
     .score-counter {
@@ -246,4 +245,13 @@
     background-color: transparent;
     box-shadow: 0px 0px 15px 5px #5d5b5b;
     pointer-events: none;
+}
+
+.board-label {
+    position: absolute;
+    font-size: 36px;
+    font-weight: bold;
+    color: rgb(71, 71, 71);
+    pointer-events: none;
+    z-index: 1;
 }
