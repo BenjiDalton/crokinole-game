@@ -29,7 +29,7 @@ export class AppComponent implements AfterViewInit {
 		this.physicsService.renderElement = this.gameAreaElement.nativeElement;
 		this.world = new WorldComponent(this.physicsService, this.gameState);
 		this.world.create();
-		// this.openPlayerInput();
+		this.openPlayerInput();
 
 		this.gameStateSubscription = this.gameState.gameStateMessage.subscribe(result => {
 			let message = result[0];
@@ -43,7 +43,23 @@ export class AppComponent implements AfterViewInit {
 	}
 	public closePlayerInput(): void {
 		let modal = document.getElementById('playerInput') as HTMLElement;
+		const playerNameEntry1 = document.querySelector('input[name="playerNameEntry1"]') as HTMLInputElement;
+		const playerNameEntry2 = document.querySelector('input[name="playerNameEntry2"]') as HTMLInputElement;
+		
+		// Access the PlayerComponent instances from the _players dictionary and set the names
+		if ( playerNameEntry1?.value ) {
+			this.gameState.players.p1.name = playerNameEntry1?.value;
+		} else {
+			this.gameState.players.p1.name = 'Player 1';
+		}
+		if ( playerNameEntry2?.value ) {
+			this.gameState.players.p2.name = playerNameEntry2?.value;
+		} else {
+			this.gameState.players.p2.name = 'Player 2';
+		}
 		modal.style.display = 'none';
+		this.gameState.newGame();
+		this._players = this.gameState.players;
 	}
 	public addPlayer(): void {
 		const playerInputModal = document.querySelector('.content') as HTMLElement;

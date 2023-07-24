@@ -25,11 +25,12 @@ export class WorldComponent implements AfterViewInit {
 	private changePlayerSubscription: Subscription;
 	private activePiece: any;
 
-	constructor(private physicsService: PhysicsService, private gameState: GameStateService) { 
+	constructor(private physicsService: PhysicsService, public gameState: GameStateService) { 
 	}
 	
 	ngAfterViewInit(): void {
 		this.changePlayerSubscription = this.gameState.activePlayer.subscribe(result => {
+
 			let playerID = result[0];
 			let player = result[1]
 			/* 
@@ -150,6 +151,8 @@ export class WorldComponent implements AfterViewInit {
 		};
 		const playerOneContainer = Bodies.rectangle(this.width * 0.13, this.height / 2, 200, 340, pieceContainerOptions);
 		const playerTwoContainer = Bodies.rectangle(this.width * 0.87, this.height / 2, 200, 340, pieceContainerOptions);
+		playerOneContainer.label = 'p1_pieceContainer';
+		playerTwoContainer.label = 'p2_pieceContainer';
 		playerOneContainer.render.strokeStyle = this.playerOneColor;
 		playerTwoContainer.render.strokeStyle = this.playerTwoColor;
 
@@ -188,10 +191,24 @@ export class WorldComponent implements AfterViewInit {
 		};
 		return Bodies.circle(x, y, 20, gamePieceOptions)
 	}
-	public updatePlayerColor(event: any): void {
-		console.log(event);
-		let colorChooser = document.getElementById(event.id);
-		this.playerTwoColor = event.value;
-		
+	public updateScore(elementID: string, value: any): void {
+		const inputElement = document.getElementById(elementID) as HTMLInputElement;
+		const currentValue = parseInt(inputElement.value);
+		inputElement.value = currentValue + value;
+	}
+	public updatePlayerColor(playerID: string, target: any): void {
+		if ( playerID === 'p1' ) {
+			this.playerOneColor = target.value;
+		} else if ( playerID === 'p2' ) {
+			this.playerTwoColor = target.value;
+		}
+		for ( let body of this.physicsService.engine.world.bodies ) {
+			if ( body.label.includes(playerID) && !body.label.includes('pieceContainer') ) {
+				body.render.fillStyle = target.value;
+			}
+			if ( body.label.includes(playerID) && body.label.includes('pieceContainer') ) {
+				body.render.strokeStyle = target.value;
+			}
+		}	
 	}
 }

@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class PhysicsService {
-	private engine = Engine.create({
+	public engine = Engine.create({
 		velocityIterations: 16,
 		positionIterations: 24
 	});
