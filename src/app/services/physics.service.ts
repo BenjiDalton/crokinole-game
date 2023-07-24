@@ -29,6 +29,7 @@ export class PhysicsService {
 	private _activePiece: any;
 	private _playerTurnOver = new Subject<any>();
 	public playerTurnOver = this._playerTurnOver.asObservable();
+	private piecesOnBoard: any[] = [];
 
 
 	public set renderElement(element: HTMLCanvasElement) {
@@ -47,7 +48,7 @@ export class PhysicsService {
 		this.setupMouseConstraint();
 		this.renderer.mouse = this.mouse;
 		this.setupEngine();
-		this.collisionDetect();
+		// this.collisionDetect();
 	}
 	public get renderElement(): HTMLCanvasElement {
 		return this._renderElement;
@@ -161,26 +162,31 @@ export class PhysicsService {
 		const scores: { [key: string]: number } = {
 			'p1': 0,
 			'p2': 0
-		  };
+		};
+
+		// let activeCollisions: any[] = [];
 		  
-		let activeCollisions: any[] = [];
-		  
-		Events.on(this.engine, 'collisionStart', event => {
-			// Collect all active collisions
-			const lastCollisions: { [key: string]: Pairs | null } = {};
-			let pairs = event.pairs;
-			for ( let i = 0, j = pairs.length; i != j; ++i ) {
-				let pair = pairs[i];
-				for ( let playerID of ['p1', 'p2'] ) {
-					if ( !pair.bodyA.label.includes('peg') && !pair.bodyB.label.includes('peg') ) {
-						if (lastCollisions[playerID] !== pair) {
-							lastCollisions[playerID] = pair;
-						}
-						activeCollisions.push([pair.bodyA, pair.bodyB]);
-					}
-				}
-			}
-		});
+		// Events.on(this.engine, 'collisionStart', event => {
+		// 	// Collect all active collisions
+		// 	const lastCollisions: { [key: string]: Pairs | null } = {};
+		// 	let pairs = event.pairs;
+		// 	for ( let i = 0, j = pairs.length; i != j; ++i ) {
+		// 		let pair = pairs[i];
+		// 		if ( !pair.bodyA === this._activePiece || !pair.bodyB === this._activePiece ) {
+		// 			return
+		// 		}
+		// 		for ( let playerID of ['p1', 'p2'] ) {
+		// 			if ( pair.bodyA.label.includes(playerID) || pair.bodyB.label.includes(playerID) ) {
+		// 				if ( !pair.bodyA.label.includes('peg') && !pair.bodyB.label.includes('peg') ) {
+		// 					if (lastCollisions[playerID] !== pair) {
+		// 						lastCollisions[playerID] = pair;
+		// 					}
+		// 					activeCollisions.push([pair.bodyA, pair.bodyB]);
+		// 				}	
+		// 			}
+		// 		}
+		// 	}
+		// });
 		let collisionInfo: null | { body: any; timestamp: number; } = null;
 		Events.on(this.mouseConstraint, "enddrag", event => {
 			if ( this._activePiece === event.body ) {
@@ -189,7 +195,8 @@ export class PhysicsService {
 					timestamp: performance.now() 
 				};
 
-				activeCollisions = [];
+				// activeCollisions = [];
+				// console.log("active collisions: ", activeCollisions)
 				// setTimeout(() => {
 				// 	// for ( let collision of activeCollisions ) {
 				// 	// 	console.log("collision: ", collision)
@@ -222,15 +229,20 @@ export class PhysicsService {
 				this._playerTurnOver.next(true);
 			}
 		});
+		
 		Events.on(this.engine, 'collisionStart', event => {
 			let pairs = event.pairs;
 			for ( let i = 0, j = pairs.length; i < j; ++i ) {
-			  let pair = pairs[i];
-			//   this.collisionDetector.bodies.push()
+			  	let pair = pairs[i];
+				  if ( !this.piecesOnBoard.includes(pair.bodyB) ) {
+					this.piecesOnBoard.push(pair.bodyB);
+				}
 				if ( pair.bodyA.label.includes('gamePiece') && pair.bodyB.label.includes('gamePiece') ) {
 					if (collisionInfo && collisionInfo.body === pair.bodyB) {
+						if ( this.piecesOnBoard.length < 2 ) {
+							break
+						}
 						if (pair.bodyA.label === pair.bodyB.label) {
-							console.log("Invalid move. You must hit the other player's pieces first");
 							setTimeout(() => {
 								this.removeBody(pair.bodyB);  
 								
@@ -239,16 +251,51 @@ export class PhysicsService {
 						collisionInfo = null;
 						return;
 					}
-				return;
+					return
 				}
 			}
 		});
-		
+
+
+		// Events.on(this.engine, 'collisionStart', event => {
+		// 	if ( !pair.bodyA.label.includes('gamePiece') && pair.bodyB.label.includes('gamePiece') ) {
+		// 		if (collisionInfo && collisionInfo.body === pair.bodyB) {
+		// 			if ( this.piecesOnBoard.length < 2 ) {
+		// 				break
+		// 			}
+		// 			for ( let activePiece of this.piecesOnBoard ) {
+		// 				if ( activePiece.label !== pair.bodyB.label && activePiece.id !== pair.bodyB.id) {
+		// 					console.log('piece should be removed')
+		// 					break
+		// 				}
+		// 			}
+		// 			console.log('pieces on board: ', this.piecesOnBoard)
+		// 			// if ( pair.bodyA.label === pair.bodyB.label ) {
+		// 			// 	break
+		// 			// }
+		// 			console.log('game piece not hit')
+					
+		// 			console.log("Invalid move. You must hit the other player's pieces first");
+		// 				setTimeout(() => {
+		// 					this.removeBody(pair.bodyB);  
+							
+		// 				}, 5000);
+		// 			collisionInfo = null;
+		// 			return;
+		// 		}
+		// 		return
+		// 	}
+		// });
 	}
+
 	public removeBody(body: Body): void {
-		const index = this.engine.world.bodies.indexOf(body);
-		if ( index !== -1 ) {
+		const engineIndex = this.engine.world.bodies.indexOf(body);
+		if ( engineIndex !== -1 ) {
 			Composite.remove(this.engine.world, body);
+		}
+		const piecesOnBoardIndex = this.piecesOnBoard.indexOf(body);
+		if ( piecesOnBoardIndex !== -1 ) {
+			this.piecesOnBoard.splice(piecesOnBoardIndex, 1)
 		}
 	}
 	public determineScore(): void {
