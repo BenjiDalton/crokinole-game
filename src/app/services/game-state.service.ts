@@ -57,8 +57,6 @@ export class GameStateService {
 			});
 	}
 	public newGame(): void {
-		console.log("new game")
-		console.log(this._players)
 		const playerNames = Object.keys(this._players);
 		const randomIndex = Math.floor(Math.random() * playerNames.length);
 		const randomPlayerName = playerNames[randomIndex];
@@ -80,9 +78,7 @@ export class GameStateService {
 		this._gameStateMessage.next([message, notificationColor]);
 	}
 	private sendCurrentPlayer(playerID: string, player: PlayerComponent): void {
-		console.log(playerID, player)
 		this._activePlayer.next([playerID, player]);
-		console.log(this._activePlayer)
 	}
 	public get players(): any {
 		return this._players;

@@ -24,10 +24,19 @@ export class WorldComponent implements AfterViewInit {
 	private boardCenterActiveColor = '#CE3D00'
 	private changePlayerSubscription: Subscription;
 	private activePiece: any;
+	public checkboxStatus = true;
+	public p1PlusMinus = true;
+	public p2PlusMinus = true;
 
-	constructor(private physicsService: PhysicsService, public gameState: GameStateService) { 
-	}
-	
+	constructor(private physicsService: PhysicsService, public gameState: GameStateService) { }
+
+	/*
+	Goals: 
+	- score container on the left and right side of player1 and 2 respectively
+	- switch button for addition and subtraction of scores 
+	- button to hide and show the score container
+	*/
+
 	ngAfterViewInit(): void {
 		this.changePlayerSubscription = this.gameState.activePlayer.subscribe(result => {
 
@@ -42,6 +51,18 @@ export class WorldComponent implements AfterViewInit {
 			this.physicsService.activePiece = this.createGamePiece(playerID, this.width / 2, this.height / 1.3);
 		});
 	}
+
+	public toggleScoreCounter(counterID: string): void {
+		let scoreCounter = document.getElementById(counterID);
+		scoreCounter?.classList.toggle('open');
+	}
+	public toggleCheckbox(checkboxID: string): void {
+		if ( checkboxID.includes('p1') ) {
+			this.p1PlusMinus = !this.p1PlusMinus;
+		} else if ( checkboxID.includes('p2') ) {
+			this.p2PlusMinus = !this.p2PlusMinus;
+		}
+	}
 	public create(): void {
 		this.generateGameBorders();
 		this.generateBoard();
@@ -54,22 +75,24 @@ export class WorldComponent implements AfterViewInit {
 			label: 'boardRails',
 			isSensor: true,
 			isStatic: true,
-			render: { fillStyle: 'black' }
+			render: { 
+				fillStyle: 'black' 
+			}
 		};
 		const boardInsideOptions: Matter.IChamferableBodyDefinition = {
 			isSensor: true,
 			isStatic: true,
 			render: { 
-			fillStyle: this.boardColor
+				fillStyle: this.boardColor
 			}
 		};
 		const boardCircleOptions: Matter.IChamferableBodyDefinition = {
 			isSensor: true,
 			isStatic: true,
 			render: { 
-			fillStyle: 'transparent', 
-			strokeStyle: 'black', 
-			lineWidth: 5
+				fillStyle: 'transparent', 
+				strokeStyle: 'black', 
+				lineWidth: 5
 			}
 		};
 		const boardOutside = Bodies.polygon(this.width / 2, this.height / 2, 8, 500, boardOutsideOptions);
@@ -94,7 +117,7 @@ export class WorldComponent implements AfterViewInit {
 			label: 'boundary',
 			isStatic: true,
 			render: {
-			fillStyle: this.showBoundaries === true ? 'white': 'transparent',
+				fillStyle: this.showBoundaries === true ? 'white': 'transparent',
 			}
 		};
 		
@@ -118,8 +141,7 @@ export class WorldComponent implements AfterViewInit {
 			label: 'peg',
 			isStatic: true,
 			render: {
-			fillStyle: 
-			this.normalPegState
+				fillStyle: this.normalPegState
 			}	
 		};
 		/*
@@ -161,18 +183,17 @@ export class WorldComponent implements AfterViewInit {
 		}
 	}
 	public assignPlayerPieces(): void {
-		for (let [playerID, player] of Object.entries(this.gameState.players)) {
+		for ( let [playerID, player] of Object.entries(this.gameState.players) ) {
 			this.generateGamePieces(playerID, player);
 		}
-		return 
 	}
 	private generateGamePieces(playerID: string, player: any): void {
 		let xStart = 250;
-		if (playerID === 'p2') {
+		if ( playerID === 'p2' ) {
 			xStart += 1500;
 		};
 		let yStart = 660;
-		for (let i = 1; i < 6; i++) {
+		for ( let i = 1; i < 6; i++ ) {
 			player.pieces.push(this.createGamePiece(playerID, xStart, yStart - 10 * i));
 		};
 		player.pieces.forEach((body: Body) => {
@@ -184,7 +205,7 @@ export class WorldComponent implements AfterViewInit {
 			label: `gamePiece_${playerID}`,
 			frictionAir: 0.04,
 			render: { 
-			fillStyle: playerID === 'p1' ? this.playerOneColor : this.playerTwoColor 
+				fillStyle: playerID === 'p1' ? this.playerOneColor : this.playerTwoColor 
 			},
 			restitution: 0.5,
 			density: 1700
@@ -194,7 +215,12 @@ export class WorldComponent implements AfterViewInit {
 	public updateScore(elementID: string, value: any): void {
 		const inputElement = document.getElementById(elementID) as HTMLInputElement;
 		const currentValue = parseInt(inputElement.value);
-		inputElement.value = currentValue + value;
+		if ( elementID.includes('p1') ) {
+			this.p1PlusMinus === true ? inputElement.value = (currentValue + value).toString() : inputElement.value = (currentValue - value).toString(); 
+		}
+		if ( elementID.includes('p2') ) {
+			this.p2PlusMinus === true ? inputElement.value = (currentValue + value).toString() : inputElement.value = (currentValue - value).toString(); 
+		}
 	}
 	public updatePlayerColor(playerID: string, target: any): void {
 		if ( playerID === 'p1' ) {

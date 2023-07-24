@@ -1,27 +1,41 @@
-<div class="piece-container" style="left: 15%;">
+<div class="piece-container piece-container-left">
 	<p> {{ gameState.players.p1.name }} </p>
-	<div class="piece-container-shadow" style="left: 13%;"></div>	
+	<div class="piece-container-shadow"></div>	
 	<div><input id="p1" type="color" value="#335B96" (change)="updatePlayerColor('p1', $event.target)"></div>
-	<div class="score-counter" style="left: 16.5%;" [style.background-color]="playerOneColor">
+	<div class="score-counter open" [style.border-color]="playerOneColor" id="p1ScoreCounter">
+		<div class="view-button" (click)="toggleScoreCounter('p1ScoreCounter')"></div>
 		<input type="number" id="p1Score" value="0">
+		<label class="switch">
+			<input type="checkbox" id="p1Checkbox" [checked]="p1PlusMinus" (click)="toggleCheckbox('p1Checkbox')">
+			<span class="slider"></span>
+			<span class="label" style="left: 20%;">-</span>
+			<span class="label" style="left: 60%;">+</span>
+		</label>
 		<br>
-		<button class="button" (click)="updateScore('p1Score', 5)">5</button>
-		<button class="button" (click)="updateScore('p1Score', 10)">10</button>
-		<button class="button" (click)="updateScore('p1Score', 15)">15</button>
-		<button class="button" (click)="updateScore('p1Score', 20)">20</button>
+		<button class="points-button" (click)="updateScore('p1Score', 5)">5</button>
+		<button class="points-button" (click)="updateScore('p1Score', 10)">10</button>
+		<button class="points-button" (click)="updateScore('p1Score', 15)">15</button>
+		<button class="points-button" (click)="updateScore('p1Score', 20)">20</button>
 	</div>
 </div>   
-<div class="piece-container" style="right: 15%;"> 
+<div class="piece-container piece-container-right"> 
 	<p> {{ gameState.players.p2.name }} </p>
-	<div class="piece-container-shadow" style="right: 13%;"></div>
+	<div class="piece-container-shadow"></div>
 	<div><input id="p2" type="color" value="#DF4A26" (change)="updatePlayerColor('p2', $event.target)"></div>
-	<div class="score-counter" style="left: 16.5%;" [style.background-color]="playerTwoColor">
+	<div class="score-counter open" [style.border-color]="playerTwoColor" id="p2ScoreCounter">
+		<div class="view-button" (click)="toggleScoreCounter('p2ScoreCounter')"></div>
 		<input type="number" id="p2Score" value="0">
+		<label class="switch">
+			<input type="checkbox" id="p2Checkbox" [checked]="p2PlusMinus" (click)="toggleCheckbox('p2Checkbox')">
+			<span class="slider"></span>
+			<span class="label" style="left: 20%;">-</span>
+			<span class="label" style="left: 60%;">+</span>
+		</label>
 		<br>
-		<button class="button" (click)="updateScore('p2Score', 5)">5</button>
-		<button class="button" (click)="updateScore('p2Score', 10)">10</button>
-		<button class="button" (click)="updateScore('p2Score', 15)">15</button>
-		<button class="button" (click)="updateScore('p2Score', 20)">20</button>
+		<button class="points-button" (click)="updateScore('p2Score', 5)">5</button>
+		<button class="points-button" (click)="updateScore('p2Score', 10)">10</button>
+		<button class="points-button" (click)="updateScore('p2Score', 15)">15</button>
+		<button class="points-button" (click)="updateScore('p2Score', 20)">20</button>
 	</div>
 </div> 
-<div class="board-shadow"></div>
+<!-- <div class="board-shadow"></div> -->

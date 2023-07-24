@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Body, Collision, Composite, Detector, Engine, Events, Mouse, MouseConstraint, Pairs, Render, Runner } from 'matter-js';
+import { Body, Collision, Composite, Detector, Engine, Events, Mouse, MouseConstraint, Pair, Pairs, Render, Runner } from 'matter-js';
 import { WorldComponent } from '../world/world.component';
 import { Subject } from 'rxjs';
 
@@ -58,8 +58,7 @@ export class PhysicsService {
 		this.handlePlayersTurn();
 	}
 
-  	constructor() { 
-	}
+  	constructor() {}
 
 	private setupEngine(): void {
 		this.engine.gravity.y = 0;
@@ -76,7 +75,6 @@ export class PhysicsService {
                 }
             }
         });
-		
 		Composite.add(this.engine.world, this.mouseConstraint);
 	}
 	public addBody(body: Body | Body[]): void {
@@ -160,6 +158,29 @@ export class PhysicsService {
 		
 	}
 	private handlePlayersTurn(): void {
+		const scores: { [key: string]: number } = {
+			'p1': 0,
+			'p2': 0
+		  };
+		  
+		let activeCollisions: any[] = [];
+		  
+		Events.on(this.engine, 'collisionStart', event => {
+			// Collect all active collisions
+			const lastCollisions: { [key: string]: Pairs | null } = {};
+			let pairs = event.pairs;
+			for ( let i = 0, j = pairs.length; i != j; ++i ) {
+				let pair = pairs[i];
+				for ( let playerID of ['p1', 'p2'] ) {
+					if ( !pair.bodyA.label.includes('peg') && !pair.bodyB.label.includes('peg') ) {
+						if (lastCollisions[playerID] !== pair) {
+							lastCollisions[playerID] = pair;
+						}
+						activeCollisions.push([pair.bodyA, pair.bodyB]);
+					}
+				}
+			}
+		});
 		let collisionInfo: null | { body: any; timestamp: number; } = null;
 		Events.on(this.mouseConstraint, "enddrag", event => {
 			if ( this._activePiece === event.body ) {
@@ -167,11 +188,38 @@ export class PhysicsService {
 					body: event.body,
 					timestamp: performance.now() 
 				};
-				// setTimeout(() => {
-				// 		this.determineScore();
-				// 	}, 5000);
 
-				this._playerTurnOver.next(true);
+				activeCollisions = [];
+				setTimeout(() => {
+					// for ( let collision of activeCollisions ) {
+					// 	console.log("collision: ", collision)
+					// }
+					// console.log("active collisions: ", activeCollisions)
+					// let scoreCollision = activeCollisions[activeCollisions.length - 1];
+					// console.log('score collision', scoreCollision)
+					// scoreCollision
+					// Process the collected active collisions and determine the score
+					// for ( const pairs of activeCollisions ) {
+					// 	for ( let i = 0, j = activeCollisions.length; i < j; ++i ) {
+							
+					// 	}
+					// 	console.log(pairs)
+						
+					//   for (let [playerID, score] of Object.entries(scores)) {
+					// 	for (let [circle, points] of Object.entries({ 'outerCircle': 5, 'middleCircle': 10, 'innerCircle': 15, 'boardCenter': 20 })) {
+					// 	  if ( pairs.bodyA.label.includes(circle) && pair.bodyB.label.includes(playerID) ) {
+					// 		// Increase the player's score accordingly
+					// 		scores[playerID] += points;
+					// 		console.log(pair.bodyB.label, ' in ', circle, ' for ', points, ' points ');
+					// 		console.log('Player', playerID, 'score:', scores[playerID]);
+					// 	  }
+					// 	}
+					//   }
+					// }
+					// this.determineScore();
+					this._playerTurnOver.next(true);
+				}, 5000);
+				
 			}
 		});
 		Events.on(this.engine, 'collisionStart', event => {
@@ -192,14 +240,7 @@ export class PhysicsService {
 						return;
 					}
 				return;
-				} 
-				// else {
-				// 	console.log("Invalid move. You must hit the other player's pieces first");
-				// 	setTimeout(() => {
-				// 		this.removeBody(pair.bodyB);  
-						
-				// 	}, 5000);
-				// }
+				}
 			}
 		});
 		
@@ -211,6 +252,29 @@ export class PhysicsService {
 		}
 	}
 	public determineScore(): void {
+		const scores: { [key: string]: number} = {
+			'p1': 0,
+			'p2': 0
+		}
+		const lastCollisions: { [key: string]: Pairs | null } = {};
+		Events.on(this.engine, 'collisionActive', event => {
+			let pairs = event.pairs;
+
+			for ( let i = 0, j = pairs.length; i != j; ++i ) {
+				let pair = pairs[i];
+				for ( let [playerID, score] of Object.entries(scores) ) {
+					for ( let [circle, points] of Object.entries({'boardCenter': 20,'innerCircle': 15, 'middleCircle': 10, 'outerCircle': 5 }) ) {
+						if ( pair.bodyA.label.includes(circle) && pair.bodyB.label.includes(playerID) ) {
+							if (lastCollisions[playerID] !== pair) {
+								lastCollisions[playerID] = pair;
+							}
+							console.log('last collision: ', lastCollisions)
+						}
+					}
+				}
+			}
+		});
+
 		// const scores: { [key: string]: number} = {
 		// 	'p1': 0,
 		// 	'p2': 0
