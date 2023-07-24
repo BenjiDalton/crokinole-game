@@ -1,0 +1,103 @@
+.piece-container {
+    position: absolute;
+    width: 10.8%;
+    height: 44.5%;
+    top: 31%;
+    background-color: transparent;
+    text-align: center;
+    justify-content: center;
+    pointer-events: none;
+
+    .piece-container-shadow {
+        position: absolute;
+        height: 342px;
+        top: 13%;
+        width: 202px;
+        left: 13%;
+        background-color: transparent;
+        box-shadow: inset 2px 3px 25px #000000;
+        pointer-events: none;
+    }
+    p {
+        all: unset;
+        position: relative;
+        bottom: 0;
+        font-size: 40px;
+        color: #f6ffff;
+        pointer-events: none;
+    }
+    input[type=color] {
+        all: unset;
+        -webkit-appearance: auto;
+        appearance: auto;
+        position: absolute;
+        background: #454653;
+        inline-size: 244px;
+        block-size: 27px;
+        bottom: 20%;
+        left: 5%;
+        pointer-events: all;
+    }
+
+    .score-counter {
+        position: absolute;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        height: 100px;
+        background-color: rgb(0, 0, 0);
+        bottom: 2%;
+        border-radius: 4px;
+        text-align: center;
+
+        input[type=number] {
+            position: absolute;
+            width: 80%;
+            height: 20%;
+            top: 5%;
+            padding: 5%;
+            margin: 5px 0 22px 0;
+            border: none;
+            text-align: center;
+            background: #f1f1f1;
+            font-size: 24px;	
+        }
+        .button {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20%;
+            height: 40%;
+            background-color: rgb(23, 23, 30);
+            top: 25%;
+            border-radius: 4px;
+            text-align: center;
+            color: whitesmoke;
+            font-size: 16px;
+            -webkit-user-select: none;
+            user-select: none;
+            pointer-events: all;
+            z-index: 995;
+        }
+        .button:hover {
+            cursor: pointer;
+            background-color: rgb(148, 148, 148);
+        }
+    }
+}
+
+
+.board-shadow {
+    position: absolute;
+    left: 34.3%;
+    top: 19%;
+    width: 800px;
+    height: 800px;
+    border-radius: 50%;
+    background-color: transparent;
+    box-shadow: 0px 0px 15px 5px #5d5b5b;
+    pointer-events: none;
+}

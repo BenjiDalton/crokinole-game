@@ -30,10 +30,9 @@ export class WorldComponent implements AfterViewInit {
 	
 	ngAfterViewInit(): void {
 		this.changePlayerSubscription = this.gameState.activePlayer.subscribe(result => {
-			console.log("result: ", result)
+
 			let playerID = result[0];
 			let player = result[1]
-			console.log(result)
 			/* 
 			remove the first body in specific player's pieces
 			create a new piece that is then placed on the board for the player to use
@@ -192,7 +191,17 @@ export class WorldComponent implements AfterViewInit {
 		};
 		return Bodies.circle(x, y, 20, gamePieceOptions)
 	}
+	public updateScore(elementID: string, value: any): void {
+		const inputElement = document.getElementById(elementID) as HTMLInputElement;
+		const currentValue = parseInt(inputElement.value);
+		inputElement.value = currentValue + value;
+	}
 	public updatePlayerColor(playerID: string, target: any): void {
+		if ( playerID === 'p1' ) {
+			this.playerOneColor = target.value;
+		} else if ( playerID === 'p2' ) {
+			this.playerTwoColor = target.value;
+		}
 		for ( let body of this.physicsService.engine.world.bodies ) {
 			if ( body.label.includes(playerID) && !body.label.includes('pieceContainer') ) {
 				body.render.fillStyle = target.value;
@@ -200,11 +209,6 @@ export class WorldComponent implements AfterViewInit {
 			if ( body.label.includes(playerID) && body.label.includes('pieceContainer') ) {
 				body.render.strokeStyle = target.value;
 			}
-		}
-		
-		console.log(target.value);
-		// let colorChooser = document.getElementById(event.id);
-		// this.playerTwoColor = event.value;
-		
+		}	
 	}
 }

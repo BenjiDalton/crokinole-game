@@ -5,9 +5,11 @@
 <div class="container">
 	<div class="player-input" id="playerInput">
 		<div class="content">
-			<label for="playerNameEntry1" style="left: 0px">Enter Player Names</label>
+			<label for="playerNameEntry1" style="left: 0px">Enter Player Name</label>
 			<input type="text" placeholder="Player name" name="playerNameEntry1" required>
+			<label for="playerNameEntry2" style="left: 0px">Enter Player Name</label>
 			<input type="text" placeholder="Player name" name="playerNameEntry2" required style="top: 50%">
+			<!-- <div class="button add-player-button" (click)="addPlayer()"><i class="fa fa-user-plus"></i></div> -->
 			<div class="button close-button" (click)="closePlayerInput()">Done</div>
 		  </div>
 	</div>
@@ -17,34 +19,8 @@
 		</div>
 	</div>
 	<div class="game-area">
-		<!-- <div class="new-game-button" (click)="newGame()">New game</div> -->
-		<div class="piece-container" style="left: 15%;">
-			<p> {{ gameState.players.p1.name }} </p>
-			<div class="piece-container-shadow" style="left: 13%;"></div>	
-			<div><input id="p1" type="color" value="#335B96" (change)="world.updatePlayerColor('p1', $event.target)"></div>
-			<div class="score-counter" style="left: 16.5%; background-color: #335B96;">
-				<input type="number" id="p1Score" value="0">
-				<br>
-				<button class="button" (click)="updateScore('p1Score', 5)">5</button>
-				<button class="button" (click)="updateScore('p1Score', 10)">10</button>
-				<button class="button" (click)="updateScore('p1Score', 15)">15</button>
-				<button class="button" (click)="updateScore('p1Score', 20)">20</button>
-			</div>
-		</div>   
-		<div class="piece-container" style="right: 15%;"> 
-			<p> {{ gameState.players.p2.name }} </p>
-			<div class="piece-container-shadow" style="right: 13%;"></div>
-			<div><input id="p2" type="color" value="#DF4A26" (change)="world.updatePlayerColor('p2', $event.target)"></div>
-			<div class="score-counter" style="left: 16.5%; background-color: #DF4A26;">
-				<input type="number" id="p2Score" value="0">
-				<br>
-				<button class="button" (click)="updateScore('p2Score', 5)">5</button>
-				<button class="button" (click)="updateScore('p2Score', 10)">10</button>
-				<button class="button" (click)="updateScore('p2Score', 15)">15</button>
-				<button class="button" (click)="updateScore('p2Score', 20)">20</button>
-			</div>
-		</div> 
-		<div class="board-shadow"></div>
+		<!-- <div class="new-game-button" (click)="newGame()">new game</div> -->
+		<app-world></app-world>
 		<canvas #gameArea class="game-canvas"></canvas>
 	</div>
 </div>
