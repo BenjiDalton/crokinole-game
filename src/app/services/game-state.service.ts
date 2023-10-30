@@ -1,6 +1,6 @@
 import { AfterViewInit, Injectable } from '@angular/core';
 import { PhysicsService } from './physics.service';
-import { PlayerComponent } from '../player/player.component';
+import { PlayerComponent } from '../components/player/player.component';
 import { Bodies, Body, Composite, Composites, IBodyDefinition } from 'matter-js';
 import { Subject, Subscription, debounceTime } from 'rxjs';
 

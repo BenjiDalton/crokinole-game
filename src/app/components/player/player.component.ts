@@ -33,7 +33,7 @@ export class PlayerComponent {
 	public get wins(): number {
 		return this._wins
 	}
-	public set pieces(pieces: []) {
+	public set pieces(pieces: any) {
 		this._pieces = pieces;
 	}
 	public get pieces(): any[] {

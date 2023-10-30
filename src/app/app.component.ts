@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { PhysicsService } from './services/physics.service';
 import { GameStateService } from './services/game-state.service';
-import { PlayerComponent } from './player/player.component';
-import { WorldComponent } from './world/world.component';
+import { PlayerComponent } from './components/player/player.component';
+import { WorldComponent } from './components/world/world.component';
 import { Subscription } from 'rxjs';
 
 @Component({
