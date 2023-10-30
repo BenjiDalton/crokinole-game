@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Body, Collision, Composite, Detector, Engine, Events, Mouse, MouseConstraint, Pair, Pairs, Render, Runner } from 'matter-js';
-import { WorldComponent } from '../world/world.component';
+import { WorldComponent } from '../components/world/world.component';
 import { Subject } from 'rxjs';
 
 @Injectable({

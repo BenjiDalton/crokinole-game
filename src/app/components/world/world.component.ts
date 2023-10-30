@@ -1,7 +1,7 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { PhysicsService } from '../services/physics.service';
+import { PhysicsService } from '../../services/physics.service';
 import { Body, Bodies, IBodyDefinition, Composite } from 'matter-js';
-import { GameStateService } from '../services/game-state.service';
+import { GameStateService } from '../../services/game-state.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -171,8 +171,8 @@ export class WorldComponent implements AfterViewInit {
 			},
 			restitution: 1
 		};
-		const playerOneContainer = Bodies.rectangle(this.width * 0.13, this.height / 2, 200, 340, pieceContainerOptions);
-		const playerTwoContainer = Bodies.rectangle(this.width * 0.87, this.height / 2, 200, 340, pieceContainerOptions);
+		const playerOneContainer = Bodies.rectangle(this.width * 0.167, this.height / 2, 200, 340, pieceContainerOptions);
+		const playerTwoContainer = Bodies.rectangle(this.width * 0.84, this.height / 2, 200, 340, pieceContainerOptions);
 		playerOneContainer.label = 'p1_pieceContainer';
 		playerTwoContainer.label = 'p2_pieceContainer';
 		playerOneContainer.render.strokeStyle = this.playerOneColor;

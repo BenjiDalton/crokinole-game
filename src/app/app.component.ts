@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { PhysicsService } from './services/physics.service';
 import { GameStateService } from './services/game-state.service';
-import { PlayerComponent } from './player/player.component';
-import { WorldComponent } from './world/world.component';
+import { PlayerComponent } from './components/player/player.component';
+import { WorldComponent } from './components/world/world.component';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -36,10 +36,18 @@ export class AppComponent implements AfterViewInit {
 			let notificationColor = result[1]
 			this.updatePlayerNotification(message, notificationColor);
 		});
+
+		
 	}
 	public openPlayerInput(): void {
 		let modal = document.getElementById('playerInput') as HTMLElement;
 		modal.style.display = 'block';
+		document.addEventListener('keydown', (event) => {
+			console.log("event: ", event)
+			if (event.key === 'Enter') {
+				this.closePlayerInput();
+			}
+		});
 	}
 	public closePlayerInput(): void {
 		let modal = document.getElementById('playerInput') as HTMLElement;

@@ -3,21 +3,13 @@
 </head>
 
 <div class="container">
-	<div class="player-input" id="playerInput">
-		<div class="content">
-			<label for="playerNameEntry1" style="left: 0px">Enter Player Name</label>
-			<input type="text" placeholder="Player name" name="playerNameEntry1" required>
-			<label for="playerNameEntry2" style="left: 0px">Enter Player Name</label>
-			<input type="text" placeholder="Player name" name="playerNameEntry2" required style="top: 50%">
-			<!-- <div class="button add-player-button" (click)="addPlayer()"><i class="fa fa-user-plus"></i></div> -->
-			<div class="button close-button" (click)="closePlayerInput()">Done</div>
-		  </div>
-	</div>
-	<div *ngFor="let notification of notifications" class="pop-up-notification">
+	<app-name-entry></app-name-entry>
+	<!-- pop up notification makes the webpage expand and scroll bars are created -->
+	<!-- <div *ngFor="let notification of notifications" class="pop-up-notification">
 		<div class="alert-simple" [ngStyle]="{ 'border-color': notification.color, 'color': notification.color }">
 			{{ notification.message }}
 		</div>
-	</div>
+	</div> -->
 	<app-world></app-world>
 	<div class="game-area">
 		<!-- <div class="new-game-button" (click)="newGame()">new game</div> -->
